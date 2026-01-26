@@ -18,7 +18,10 @@ import {
   RefreshCw,
   Database,
   Cloud,
-  Heart
+  Heart,
+  BookOpen,
+  Calendar,
+  Compass
 } from 'lucide-react';
 
 const App = () => {
@@ -49,7 +52,8 @@ const App = () => {
             {[
               { id: 'home', label: 'Home' },
               { id: 'process', label: 'How we work' },
-              { id: 'submit', label: 'Report a problem' },
+              { id: 'library', label: 'Flight Library' },
+              { id: 'submit', label: 'Fix a process' },
               { id: 'join', label: 'Join us' }
             ].map((tab) => (
               <button
@@ -79,7 +83,8 @@ const App = () => {
           {[
             { id: 'home', label: 'Home' },
             { id: 'process', label: 'How we work' },
-            { id: 'submit', label: 'Report a problem' },
+            { id: 'library', label: 'Flight Library' },
+            { id: 'submit', label: 'Fix a process' },
             { id: 'join', label: 'Join us' }
           ].map((tab) => (
             <button
@@ -122,10 +127,10 @@ const App = () => {
             Fix a process now <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
           </button>
           <button 
-            onClick={() => setActiveTab('process')}
+            onClick={() => setActiveTab('library')}
             className="w-full sm:w-auto px-10 py-5 bg-white border-2 border-slate-200 text-slate-600 text-[11px] font-black uppercase tracking-[0.2em] hover:border-[#FFC72C] transition-all rounded-sm"
           >
-            See how we build
+            View Field Guides
           </button>
         </div>
       </div>
@@ -136,7 +141,31 @@ const App = () => {
     <div className="space-y-32 pb-32">
       <Hero />
       
-      {/* Human-Centered Comparison */}
+      {/* Visual Guide Infographic Snippet */}
+      <section className="max-w-6xl mx-auto px-6">
+        <div className="bg-slate-50 rounded-2xl p-8 md:p-12 border border-slate-200 shadow-sm overflow-hidden relative">
+           <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12">
+              <Compass size={120} className="text-[#003087]" />
+           </div>
+           <div className="relative z-10 max-w-2xl">
+              <h3 className="text-xs font-black text-[#003087] uppercase tracking-[0.4em] mb-4">A Proven Playbook</h3>
+              <h4 className="text-3xl font-black text-slate-900 uppercase tracking-tighter mb-6">The "Product Approach"</h4>
+              <p className="text-slate-600 font-medium leading-relaxed mb-8">
+                The State of California's standardized, human-centered methodology for building better services and processes. 
+                It's not just for technology; it's a way of thinking about mission execution.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                 {['User-Focused', 'Iterative', 'Data-Driven'].map(tag => (
+                   <span key={tag} className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-[10px] font-black uppercase tracking-widest text-[#003087]">
+                      {tag}
+                   </span>
+                 ))}
+              </div>
+           </div>
+        </div>
+      </section>
+
+      {/* Manual vs Modern Comparison */}
       <section className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-20">
           <h2 className="text-xs font-black text-[#003087] uppercase tracking-[0.4em] mb-4">Why we modernize</h2>
@@ -208,31 +237,12 @@ const App = () => {
               </p>
               <p className="text-slate-500 text-sm font-medium mb-6">
                 {surveyScore > 3 
-                  ? "That's a lot of wasted time. Tell us about it below." 
+                  ? "That's a lot of wasted time. Tell us about the manual process below." 
                   : "Your work seems efficient! Tell us how you do it."}
               </p>
               <button onClick={() => setSurveyScore(null)} className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200 pb-1">Reset</button>
             </div>
           )}
-        </div>
-      </section>
-
-      {/* Simplified Modernization Steps */}
-      <section className="max-w-6xl mx-auto px-6">
-        <div className="grid md:grid-cols-3 gap-12">
-          {[
-            { title: "Fix the Data", desc: "We take your messy spreadsheets and put them in a safe, shared spot.", icon: Database },
-            { title: "Do it Automatically", desc: "We use software to handle boring tasks like sending emails and reminders.", icon: Zap },
-            { title: "See the Big Picture", desc: "We build charts that show exactly how ready your unit is in real-time.", icon: BarChart3 },
-          ].map((pill, i) => (
-            <div key={i} className="space-y-6 group">
-              <div className="inline-flex p-4 bg-slate-50 border border-slate-100 rounded-xl group-hover:bg-[#FFC72C]/10 transition-all">
-                <pill.icon size={24} className="text-[#003087]" />
-              </div>
-              <h4 className="text-lg font-black text-slate-900 uppercase tracking-tight">{pill.title}</h4>
-              <p className="text-slate-500 text-sm leading-relaxed font-medium">{pill.desc}</p>
-            </div>
-          ))}
         </div>
       </section>
     </div>
@@ -243,17 +253,41 @@ const App = () => {
       <div className="text-center mb-24">
         <div className="w-12 h-1 bg-[#C8102E] mx-auto mb-8"></div>
         <h2 className="text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-4">How we build <br /> for you</h2>
-        <p className="text-slate-500 font-bold uppercase text-[10px] tracking-[0.4em]">6 Simple Steps to a Better Mission</p>
+        <p className="text-slate-500 font-bold uppercase text-[10px] tracking-[0.4em]">From Problem to Deployed Solution</p>
+      </div>
+
+      {/* Visual Workflow Infographic */}
+      <div className="mb-24 flex flex-col md:flex-row items-center justify-between gap-4">
+        {[
+          { label: 'Define', sub: 'Discovery', icon: Search },
+          { label: 'Develop', sub: 'Ideation', icon: Layout },
+          { label: 'Build', sub: 'Prototype', icon: Zap },
+          { label: 'Test', sub: 'Under Fire', icon: Target },
+          { label: 'Deploy', sub: 'Iterate', icon: ShieldCheck },
+        ].map((item, i) => (
+          <React.Fragment key={i}>
+            <div className="flex flex-col items-center text-center group cursor-help">
+              <div className="w-16 h-16 rounded-full bg-slate-50 border-2 border-slate-200 flex items-center justify-center text-[#003087] group-hover:bg-[#FFC72C] group-hover:border-[#FFC72C] transition-all">
+                <item.icon size={24} />
+              </div>
+              <div className="mt-4">
+                <p className="text-[10px] font-black uppercase text-[#003087]">{item.label}</p>
+                <p className="text-[9px] font-bold uppercase text-slate-400 tracking-widest">{item.sub}</p>
+              </div>
+            </div>
+            {i < 4 && <div className="hidden md:block w-full h-0.5 bg-slate-100 flex-1 mx-2"></div>}
+          </React.Fragment>
+        ))}
       </div>
       
       <div className="space-y-4">
         {[
-          { title: "Understand the Work", desc: "We talk to you to see the problem from your perspective. We don't guess." },
-          { title: "Sketch a Plan", desc: "We look for the simplest and fastest way to fix the friction." },
-          { title: "Build it Fast", desc: "The Innovation Cell builds a working tool in just 30 days." },
-          { title: "Use Modern Tech", desc: "We use the apps you already have, like Power BI and SharePoint." },
-          { title: "Test it with You", desc: "You use the tool while you work. If it's hard to use, we fix it." },
-          { title: "Launch it", desc: "The tool goes live and we keep making it better based on your feedback." },
+          { title: "Define the Battlefield", desc: "We sit with you to understand the problem from the person living it every day." },
+          { title: "Develop Courses of Action", desc: "We sketch multiple ideas and weigh them against Readiness, Speed, and Cost." },
+          { title: "Build the Prototype", desc: "The Innovation Cell builds a functional version in short, 30-day bursts." },
+          { title: "Use Approved Tech", desc: "We use the apps you already have: Power BI, Power Apps, and SharePoint." },
+          { title: "Test Under Fire", desc: "You use the tool while you work. If users struggle, we fix it immediately." },
+          { title: "Mission Deployment", desc: "The tool goes live and we track real-time results like hours saved." },
         ].map((step, i) => (
           <div key={i} className="flex gap-6 p-10 bg-slate-50 rounded-lg border border-slate-200 items-start hover:bg-white hover:border-[#003087]/20 transition-all group">
             <span className="text-4xl font-black text-[#003087]/10 group-hover:text-[#FFC72C] transition-colors leading-none">0{i + 1}</span>
@@ -264,6 +298,58 @@ const App = () => {
           </div>
         ))}
       </div>
+
+      {/* Pilot Timeline Infographic (Slide 11) */}
+      <div className="mt-32">
+         <h4 className="text-xs font-black text-[#003087] uppercase tracking-[0.5em] mb-12 text-center">Pilot Timeline (First 90 Days)</h4>
+         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { days: '0-15', task: 'Collect Problems', color: 'bg-slate-100' },
+              { days: '15-30', task: 'Select Team', color: 'bg-slate-100' },
+              { days: '30-60', task: 'Sprint Cycle', color: 'bg-[#FFC72C]/20' },
+              { days: '60-90', task: 'Demo & Report', color: 'bg-[#003087] text-white' },
+            ].map((milestone, i) => (
+              <div key={i} className={`p-6 rounded-xl border border-slate-200 ${milestone.color} flex flex-col justify-between aspect-square md:aspect-auto`}>
+                 <span className="text-[10px] font-black uppercase opacity-60 tracking-widest">Day {milestone.days}</span>
+                 <p className="text-lg font-black uppercase tracking-tighter leading-none mt-4">{milestone.task}</p>
+              </div>
+            ))}
+         </div>
+      </div>
+    </div>
+  );
+
+  const Library = () => (
+    <div className="max-w-6xl mx-auto px-6 py-24">
+      <div className="text-center mb-24">
+        <div className="w-12 h-1 bg-[#FFC72C] mx-auto mb-8"></div>
+        <h2 className="text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-4 italic">Flight Library</h2>
+        <p className="text-slate-500 font-bold uppercase text-[10px] tracking-[0.4em]">Field Guides for Citizen Developers</p>
+      </div>
+
+      <div className="grid md:grid-cols-3 gap-8">
+         {[
+           { title: 'Innovation Playbook', sub: 'Standard Methodology', icon: BookOpen, accent: 'bg-[#003087]', content: 'Learn the Product Approach used by the State of California and the Innovation Fellows.' },
+           { title: 'Power App Guide', sub: 'Rapid Development', icon: Layout, accent: 'bg-[#C8102E]', content: 'Strategic and tactical knowledge to build trackers, forms, and info hubs.' },
+           { title: 'Power BI Flight Brief', sub: 'Data Dominance', icon: BarChart3, accent: 'bg-[#FFC72C]', content: 'Transform raw data into a Common Operational Picture using Star Schema modeling.' },
+           { title: 'Automation Mission', sub: 'Power Automate', icon: Zap, accent: 'bg-[#003087]', content: 'Building your first automated workflow to accelerate unit communication.' },
+           { title: 'Process Mapping', sub: 'Tactical Recon', icon: Search, accent: 'bg-slate-900', content: 'Step-by-step field guide to identifying friction and mapping pain points.' },
+           { title: 'Success Metrics', sub: 'Measuring Impact', icon: Gauge, accent: 'bg-slate-400', content: 'Understanding KPIs: From simple outputs to mission-critical outcomes.' },
+         ].map((guide, i) => (
+           <div key={i} className="bg-white border-2 border-slate-50 rounded-2xl p-8 hover:shadow-2xl transition-all group flex flex-col h-full">
+              <div className={`w-12 h-12 ${guide.accent} text-white flex items-center justify-center rounded-xl mb-6 shadow-lg`}>
+                 <guide.icon size={22} />
+              </div>
+              <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1">{guide.sub}</p>
+              <h4 className="text-xl font-black text-slate-900 uppercase tracking-tighter mb-4">{guide.title}</h4>
+              <p className="text-slate-500 text-sm font-medium leading-relaxed flex-grow">{guide.content}</p>
+              <div className="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between text-[#003087]">
+                 <span className="text-[10px] font-black uppercase tracking-widest">Download Guide</span>
+                 <ArrowRight size={16} />
+              </div>
+           </div>
+         ))}
+      </div>
     </div>
   );
 
@@ -271,11 +357,11 @@ const App = () => {
     <div className="max-w-4xl mx-auto px-6 py-24">
       <div className="bg-white shadow-2xl rounded-sm overflow-hidden border border-slate-200">
         <div className="bg-[#003087] py-12 px-8 text-white relative">
-           <h2 className="text-4xl font-black uppercase tracking-tighter mb-2">Report a problem</h2>
+           <h2 className="text-4xl font-black uppercase tracking-tighter mb-2 italic">Submit a mission bottleneck</h2>
            <p className="text-blue-200 text-[10px] font-bold uppercase tracking-[0.4em]">Tell us what needs fixing</p>
         </div>
         
-        <form className="p-8 md:p-12 space-y-10" onSubmit={(e) => { e.preventDefault(); alert("We got your message. Thank you."); }}>
+        <form className="p-8 md:p-12 space-y-10" onSubmit={(e) => { e.preventDefault(); alert("Mission request submitted for evaluation."); }}>
           <div className="grid md:grid-cols-2 gap-10">
             <div className="space-y-2">
               <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">What is your name?</label>
@@ -288,13 +374,13 @@ const App = () => {
           </div>
           
           <div className="space-y-2">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">What is slowing you down?</label>
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest uppercase">Describe the manual bottleneck</label>
             <p className="text-[10px] text-slate-400 mb-2 italic">Tell us about the spreadsheet, email chain, or manual task that wastes your time.</p>
             <textarea rows="5" className="w-full bg-slate-50 border-2 border-slate-100 p-4 focus:border-[#003087] outline-none font-medium text-slate-800 resize-none" required></textarea>
           </div>
 
           <div className="bg-slate-50 p-6 rounded-lg">
-             <p className="text-[10px] font-black text-[#003087] uppercase mb-4">How will fixing this help?</p>
+             <p className="text-[10px] font-black text-[#003087] uppercase mb-4">How will fixing this help the mission?</p>
              <div className="grid md:grid-cols-3 gap-4">
                 {['Save time', 'Reduce mistakes', 'Better visibility'].map(tag => (
                   <label key={tag} className="flex items-center gap-3 cursor-pointer">
@@ -385,6 +471,7 @@ const App = () => {
       <main className="animate-in fade-in duration-1000">
         {activeTab === 'home' && <Home />}
         {activeTab === 'process' && <Process />}
+        {activeTab === 'library' && <Library />}
         {activeTab === 'submit' && <SubmitForm />}
         {activeTab === 'join' && <JoinForm />}
       </main>
