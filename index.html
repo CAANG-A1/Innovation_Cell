@@ -1,483 +1,373 @@
-import React, { useState } from 'react';
-import { 
-  Target, 
-  Users, 
-  ShieldCheck, 
-  Zap, 
-  BarChart3, 
-  ArrowRight,
-  CheckCircle2,
-  Menu,
-  X,
-  FileText,
-  MessageSquareText,
-  Search,
-  Layout,
-  Gauge,
-  Cpu,
-  RefreshCw,
-  Database,
-  Cloud,
-  Heart,
-  BookOpen,
-  Calendar,
-  Compass
-} from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CA ANG Innovation Cell</title>
+    <!-- Tailwind CSS for Modern Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React and ReactDOM via CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX processing in-browser -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .animate-fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-white text-slate-900">
+    <div id="root"></div>
 
-const App = () => {
-  const [activeTab, setActiveTab] = useState('home');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [surveyScore, setSurveyScore] = useState(null);
+    <script type="text/babel">
+        const { useState, useEffect, Fragment } = React;
 
-  const Nav = () => (
-    <nav className="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="flex items-center justify-between h-20">
-          <div className="flex items-center gap-4 group cursor-pointer" onClick={() => setActiveTab('home')}>
-            <div className="relative">
-              <div className="absolute -inset-1 bg-[#FFC72C] rounded-full blur opacity-20 group-hover:opacity-40 transition-opacity"></div>
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/e/e0/California_Air_National_Guard_USAF_patch.svg" 
-                alt="CA ANG" 
-                className="w-10 h-10 relative" 
-              />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-black text-slate-900 leading-none text-base uppercase tracking-tighter">CA ANG</span>
-              <span className="text-[10px] text-[#003087] font-bold uppercase tracking-widest">Innovation Cell</span>
-            </div>
-          </div>
-          
-          <div className="hidden md:flex items-center space-x-2">
-            {[
-              { id: 'home', label: 'Home' },
-              { id: 'process', label: 'How we work' },
-              { id: 'library', label: 'Flight Library' },
-              { id: 'submit', label: 'Fix a process' },
-              { id: 'join', label: 'Join us' }
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 text-[11px] font-bold uppercase tracking-widest transition-all rounded-md ${
-                  activeTab === tab.id 
-                    ? 'bg-[#003087] text-white shadow-md' 
-                    : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
+        // Custom Component for Icons
+        const Icon = ({ name, size = 24, className = "" }) => {
+            useEffect(() => {
+                if (window.lucide) window.lucide.createIcons();
+            }, [name]);
+            return <i data-lucide={name} style={{ width: size, height: size }} className={className}></i>;
+        };
 
-          <div className="md:hidden">
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="text-slate-900 p-2 rounded-lg bg-slate-100">
-              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-          </div>
-        </div>
-      </div>
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('home');
+            const [surveyScore, setSurveyScore] = useState(null);
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-t border-slate-100 px-6 py-6 space-y-3 shadow-2xl">
-          {[
-            { id: 'home', label: 'Home' },
-            { id: 'process', label: 'How we work' },
-            { id: 'library', label: 'Flight Library' },
-            { id: 'submit', label: 'Fix a process' },
-            { id: 'join', label: 'Join us' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => { setActiveTab(tab.id); setIsMenuOpen(false); }}
-              className={`block w-full text-left px-4 py-3 rounded-lg text-xs font-bold uppercase tracking-widest ${
-                activeTab === tab.id ? 'bg-[#003087] text-white' : 'bg-slate-50 text-slate-500'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </nav>
-  );
+            const navigation = [
+                { id: 'home', label: 'Home' },
+                { id: 'process', label: 'How we work' },
+                { id: 'library', label: 'Flight Library' },
+                { id: 'submit', label: 'Fix a process' },
+                { id: 'join', label: 'Join us' }
+            ];
 
-  const Hero = () => (
-    <div className="relative bg-white pt-24 pb-20 px-6 overflow-hidden border-b border-slate-100">
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-           style={{ backgroundImage: 'radial-gradient(#003087 1px, transparent 1px)', backgroundSize: '32px 32px' }}></div>
-      
-      <div className="max-w-5xl mx-auto text-center relative z-10">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFC72C]/10 border border-[#FFC72C]/20 mb-10">
-          <Heart size={14} className="text-[#C8102E]" />
-          <span className="text-[10px] font-black text-[#003087] uppercase tracking-[0.2em]">Tools built for you</span>
-        </div>
-        <h1 className="text-5xl md:text-7xl font-bold text-slate-900 tracking-tighter mb-8 leading-[0.9]">
-          Stop moving data. <br />
-          <span className="text-[#003087] font-black italic">Start moving the mission.</span>
-        </h1>
-        <p className="text-xl text-slate-600 max-w-2xl mx-auto mb-12 leading-relaxed font-medium">
-          We take the slow, painful parts of your job and make them digital. We build tools that are easy to use so you can focus on being an Airman, not a data courier.
-        </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button 
-            onClick={() => setActiveTab('submit')}
-            className="w-full sm:w-auto px-10 py-5 bg-[#003087] text-white text-[11px] font-black uppercase tracking-[0.2em] hover:bg-blue-800 transition-all rounded-sm shadow-xl flex items-center justify-center gap-3 group"
-          >
-            Fix a process now <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-          </button>
-          <button 
-            onClick={() => setActiveTab('library')}
-            className="w-full sm:w-auto px-10 py-5 bg-white border-2 border-slate-200 text-slate-600 text-[11px] font-black uppercase tracking-[0.2em] hover:border-[#FFC72C] transition-all rounded-sm"
-          >
-            View Field Guides
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+            const Nav = () => (
+                <nav class="glass border-b border-slate-200 sticky top-0 z-50">
+                    <div class="max-w-6xl mx-auto px-6">
+                        <div class="flex items-center justify-between h-20">
+                            <div class="flex items-center gap-4 group cursor-pointer" onClick={() => setActiveTab('home')}>
+                                <div class="relative">
+                                    <div class="absolute -inset-1 bg-[#FFC72C] rounded-full blur opacity-20"></div>
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/California_Air_National_Guard_USAF_patch.svg" alt="CA ANG" class="w-10 h-10 relative" />
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="font-black text-slate-900 leading-none text-base uppercase tracking-tighter">CA ANG</span>
+                                    <span class="text-[10px] text-[#003087] font-bold uppercase tracking-widest">Innovation Cell</span>
+                                </div>
+                            </div>
+                            
+                            <div class="hidden md:flex items-center space-x-2">
+                                {navigation.map((tab) => (
+                                    <button
+                                        key={tab.id}
+                                        onClick={() => setActiveTab(tab.id)}
+                                        class={`px-4 py-2 text-[11px] font-bold uppercase tracking-widest transition-all rounded-md ${
+                                            activeTab === tab.id ? 'bg-[#003087] text-white shadow-md' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
+                                        }`}
+                                    >
+                                        {tab.label}
+                                    </button>
+                                ))}
+                            </div>
 
-  const Home = () => (
-    <div className="space-y-32 pb-32">
-      <Hero />
-      
-      {/* Visual Guide Infographic Snippet */}
-      <section className="max-w-6xl mx-auto px-6">
-        <div className="bg-slate-50 rounded-2xl p-8 md:p-12 border border-slate-200 shadow-sm overflow-hidden relative">
-           <div className="absolute top-0 right-0 p-8 opacity-10 rotate-12">
-              <Compass size={120} className="text-[#003087]" />
-           </div>
-           <div className="relative z-10 max-w-2xl">
-              <h3 className="text-xs font-black text-[#003087] uppercase tracking-[0.4em] mb-4">A Proven Playbook</h3>
-              <h4 className="text-3xl font-black text-slate-900 uppercase tracking-tighter mb-6">The "Product Approach"</h4>
-              <p className="text-slate-600 font-medium leading-relaxed mb-8">
-                The State of California's standardized, human-centered methodology for building better services and processes. 
-                It's not just for technology; it's a way of thinking about mission execution.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                 {['User-Focused', 'Iterative', 'Data-Driven'].map(tag => (
-                   <span key={tag} className="px-4 py-2 bg-white border border-slate-200 rounded-lg text-[10px] font-black uppercase tracking-widest text-[#003087]">
-                      {tag}
-                   </span>
-                 ))}
-              </div>
-           </div>
-        </div>
-      </section>
+                            <button onClick={() => setIsMenuOpen(!isMenuOpen)} class="md:hidden text-slate-900 p-2">
+                                <Icon name={isMenuOpen ? "x" : "menu"} />
+                            </button>
+                        </div>
+                    </div>
+                    {isMenuOpen && (
+                        <div class="md:hidden bg-white border-t border-slate-100 px-6 py-6 space-y-3 shadow-xl">
+                            {navigation.map((tab) => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => { setActiveTab(tab.id); setIsMenuOpen(false); }}
+                                    class={`block w-full text-left px-4 py-3 rounded-lg text-xs font-bold uppercase tracking-widest ${
+                                        activeTab === tab.id ? 'bg-[#003087] text-white' : 'bg-slate-50 text-slate-500'
+                                    }`}
+                                >
+                                    {tab.label}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </nav>
+            );
 
-      {/* Manual vs Modern Comparison */}
-      <section className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-20">
-          <h2 className="text-xs font-black text-[#003087] uppercase tracking-[0.4em] mb-4">Why we modernize</h2>
-          <h3 className="text-3xl font-black text-slate-900 uppercase tracking-tight">Making work better for you</h3>
-        </div>
-        
-        <div className="grid md:grid-cols-2 gap-px bg-slate-200 border border-slate-200 rounded-2xl overflow-hidden shadow-2xl">
-          <div className="bg-slate-50 p-10 md:p-16 space-y-10 opacity-70">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">The Old Way (Slow)</h4>
-            <ul className="space-y-6">
-              {[
-                "Endless typing into messy spreadsheets.",
-                "Reports that take days to finish.",
-                "Leadership has to wait for emails to see data.",
-                "Small mistakes break the whole process."
-              ].map((item, i) => (
-                <li key={i} className="flex gap-4 items-start">
-                  <X size={18} className="text-slate-300 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm text-slate-500 font-medium">{item}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          <div className="bg-white p-10 md:p-16 space-y-10 border-l-4 border-[#FFC72C]">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-[#003087]">The New Way (Fast)</h4>
-            <ul className="space-y-6">
-              {[
-                "Apps that check for errors while you type.",
-                "Dashboards that update themselves automatically.",
-                "Everyone sees the same data at the same time.",
-                "Built by you to solve your specific problems."
-              ].map((item, i) => (
-                <li key={i} className="flex gap-4 items-start">
-                  <CheckCircle2 size={18} className="text-[#C8102E] mt-0.5 flex-shrink-0" />
-                  <p className="text-sm text-slate-700 font-bold">{item}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
+            const Hero = () => (
+                <div class="relative bg-white pt-24 pb-20 px-6 overflow-hidden border-b border-slate-100">
+                    <div class="max-w-5xl mx-auto text-center relative z-10 animate-fade-in">
+                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFC72C]/10 border border-[#FFC72C]/20 mb-10">
+                            <Icon name="heart" size={14} className="text-[#C8102E]" />
+                            <span class="text-[10px] font-black text-[#003087] uppercase tracking-[0.2em]">Tools built for Airmen</span>
+                        </div>
+                        <h1 class="text-5xl md:text-7xl font-bold text-slate-900 tracking-tighter mb-8 leading-[0.9]">
+                            Stop moving data. <br />
+                            <span class="text-[#003087] font-black italic">Start moving the mission.</span>
+                        </h1>
+                        <p class="text-xl text-slate-600 max-w-2xl mx-auto mb-12 leading-relaxed font-medium">
+                            We take the slow, painful parts of your job and make them digital. We build tools that are easy to use so you can focus on being an Airman, not a data courier.
+                        </p>
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                            <button onClick={() => setActiveTab('submit')} class="w-full sm:w-auto px-10 py-5 bg-[#003087] text-white text-[11px] font-black uppercase tracking-[0.2em] hover:bg-blue-800 transition-all rounded-sm shadow-xl flex items-center justify-center gap-3 group">
+                                Fix a process now <Icon name="arrow-right" size={16} className="group-hover:translate-x-1 transition-transform" />
+                            </button>
+                            <button onClick={() => setActiveTab('library')} class="w-full sm:w-auto px-10 py-5 bg-white border-2 border-slate-200 text-slate-600 text-[11px] font-black uppercase tracking-[0.2em] hover:border-[#FFC72C] transition-all rounded-sm">
+                                View Field Guides
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
 
-      {/* Pulse Check - Plain Language */}
-      <section className="bg-slate-900 py-32 px-6 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-full h-1 bg-[#C8102E]"></div>
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <h2 className="text-[10px] font-bold text-blue-400 uppercase tracking-[0.5em] mb-12">Is your process broken?</h2>
-          <h3 className="text-3xl md:text-4xl font-black text-white mb-6 uppercase tracking-tighter">How much does paperwork slow you down?</h3>
-          <p className="text-blue-100 mb-12 max-w-lg mx-auto font-medium opacity-80">Select 1 for "My work is easy" to 5 for "I spend all day in Excel."</p>
-          
-          {surveyScore === null ? (
-            <div className="flex flex-wrap justify-center gap-3">
-              {[1, 2, 3, 4, 5].map(num => (
-                <button 
-                  key={num} 
-                  onClick={() => setSurveyScore(num)}
-                  className="w-16 h-16 border-2 border-blue-800 text-blue-300 text-xl font-black hover:border-[#FFC72C] hover:text-[#FFC72C] transition-all rounded-sm flex items-center justify-center bg-blue-900/50"
-                >
-                  {num}
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white p-10 rounded-sm shadow-2xl inline-block animate-in zoom-in duration-300">
-              <Gauge size={40} className="mx-auto text-[#C8102E] mb-6" />
-              <p className="text-xl font-black text-slate-900 uppercase tracking-tight mb-2">
-                {surveyScore > 3 ? "We can help" : "Good to go"}
-              </p>
-              <p className="text-slate-500 text-sm font-medium mb-6">
-                {surveyScore > 3 
-                  ? "That's a lot of wasted time. Tell us about the manual process below." 
-                  : "Your work seems efficient! Tell us how you do it."}
-              </p>
-              <button onClick={() => setSurveyScore(null)} className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200 pb-1">Reset</button>
-            </div>
-          )}
-        </div>
-      </section>
-    </div>
-  );
+            const HomePage = () => (
+                <div class="space-y-32 pb-32">
+                    <Hero />
+                    
+                    {/* Visual Guide: The Product Approach */}
+                    <section class="max-w-6xl mx-auto px-6">
+                        <div class="bg-slate-50 rounded-2xl p-8 md:p-12 border border-slate-200 shadow-sm relative overflow-hidden">
+                            <div class="absolute top-0 right-0 p-8 opacity-5 rotate-12">
+                                <Icon name="compass" size={160} />
+                            </div>
+                            <div class="relative z-10 max-w-2xl">
+                                <h3 class="text-xs font-black text-[#003087] uppercase tracking-[0.4em] mb-4">Human-Centered Modernization</h3>
+                                <h4 class="text-3xl font-black text-slate-900 uppercase tracking-tighter mb-6 text-slate-800">The "Product Approach"</h4>
+                                <p class="text-slate-600 font-medium leading-relaxed mb-8">
+                                    Our methodology focuses on the user first. We don't build software based on assumptions; we build it based on direct evidence from the Airmen who live the problem.
+                                </p>
+                                <div class="flex flex-wrap gap-4">
+                                    {['User-Focused', 'Iterative', 'Data-Driven'].map(tag => (
+                                        <span key={tag} class="px-4 py-2 bg-white border border-slate-200 rounded-lg text-[10px] font-black uppercase tracking-widest text-[#003087]">
+                                            {tag}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </section>
 
-  const Process = () => (
-    <div className="max-w-4xl mx-auto px-6 py-24">
-      <div className="text-center mb-24">
-        <div className="w-12 h-1 bg-[#C8102E] mx-auto mb-8"></div>
-        <h2 className="text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-4">How we build <br /> for you</h2>
-        <p className="text-slate-500 font-bold uppercase text-[10px] tracking-[0.4em]">From Problem to Deployed Solution</p>
-      </div>
+                    {/* Manual vs Modern Comparison */}
+                    <section class="max-w-6xl mx-auto px-6">
+                        <div class="text-center mb-16">
+                            <h2 class="text-xs font-black text-[#003087] uppercase tracking-[0.4em] mb-4">Why we modernize</h2>
+                            <h3 class="text-3xl font-black text-slate-900 uppercase tracking-tight">Evolving Mission Workflows</h3>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-px bg-slate-200 border border-slate-200 rounded-2xl overflow-hidden shadow-2xl">
+                            <div class="bg-slate-50 p-10 space-y-8 opacity-70">
+                                <h4 class="text-[10px] font-black uppercase tracking-widest text-slate-400">Legacy Work (Slow)</h4>
+                                <ul class="space-y-4">
+                                    {["Manual Excel roll-ups that take days.", "Data living in siloed email chains.", "Skilled Airmen acting as data couriers.", "Leadership relying on delayed information."].map((item, i) => (
+                                        <li key={i} class="flex gap-4 items-start text-sm text-slate-500">
+                                            <Icon name="x" size={18} className="text-slate-300 flex-shrink-0" /> {item}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div class="bg-white p-10 space-y-8 border-l-4 border-[#FFC72C]">
+                                <h4 class="text-[10px] font-black uppercase tracking-widest text-[#003087]">Modern Execution (Fast)</h4>
+                                <ul class="space-y-4">
+                                    {["Automated apps that check data instantly.", "Real-time Power BI dashboards.", "Shared access for the whole unit.", "Built-in accountability and error reduction."].map((item, i) => (
+                                        <li key={i} class="flex gap-4 items-start text-sm text-slate-700 font-bold">
+                                            <Icon name="check-circle-2" size={18} className="text-[#C8102E] flex-shrink-0" /> {item}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
 
-      {/* Visual Workflow Infographic */}
-      <div className="mb-24 flex flex-col md:flex-row items-center justify-between gap-4">
-        {[
-          { label: 'Define', sub: 'Discovery', icon: Search },
-          { label: 'Develop', sub: 'Ideation', icon: Layout },
-          { label: 'Build', sub: 'Prototype', icon: Zap },
-          { label: 'Test', sub: 'Under Fire', icon: Target },
-          { label: 'Deploy', sub: 'Iterate', icon: ShieldCheck },
-        ].map((item, i) => (
-          <React.Fragment key={i}>
-            <div className="flex flex-col items-center text-center group cursor-help">
-              <div className="w-16 h-16 rounded-full bg-slate-50 border-2 border-slate-200 flex items-center justify-center text-[#003087] group-hover:bg-[#FFC72C] group-hover:border-[#FFC72C] transition-all">
-                <item.icon size={24} />
-              </div>
-              <div className="mt-4">
-                <p className="text-[10px] font-black uppercase text-[#003087]">{item.label}</p>
-                <p className="text-[9px] font-bold uppercase text-slate-400 tracking-widest">{item.sub}</p>
-              </div>
-            </div>
-            {i < 4 && <div className="hidden md:block w-full h-0.5 bg-slate-100 flex-1 mx-2"></div>}
-          </React.Fragment>
-        ))}
-      </div>
-      
-      <div className="space-y-4">
-        {[
-          { title: "Define the Battlefield", desc: "We sit with you to understand the problem from the person living it every day." },
-          { title: "Develop Courses of Action", desc: "We sketch multiple ideas and weigh them against Readiness, Speed, and Cost." },
-          { title: "Build the Prototype", desc: "The Innovation Cell builds a functional version in short, 30-day bursts." },
-          { title: "Use Approved Tech", desc: "We use the apps you already have: Power BI, Power Apps, and SharePoint." },
-          { title: "Test Under Fire", desc: "You use the tool while you work. If users struggle, we fix it immediately." },
-          { title: "Mission Deployment", desc: "The tool goes live and we track real-time results like hours saved." },
-        ].map((step, i) => (
-          <div key={i} className="flex gap-6 p-10 bg-slate-50 rounded-lg border border-slate-200 items-start hover:bg-white hover:border-[#003087]/20 transition-all group">
-            <span className="text-4xl font-black text-[#003087]/10 group-hover:text-[#FFC72C] transition-colors leading-none">0{i + 1}</span>
-            <div className="flex-1">
-              <h4 className="text-sm font-black text-slate-900 uppercase tracking-widest mb-2">{step.title}</h4>
-              <p className="text-slate-500 text-sm font-medium leading-relaxed">{step.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+                    {/* Friction Gauge */}
+                    <section class="bg-slate-900 py-24 px-6 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-[#C8102E]"></div>
+                        <div class="max-w-3xl mx-auto text-center relative z-10">
+                            <h2 class="text-[10px] font-bold text-blue-400 uppercase tracking-[0.5em] mb-12">Identify Friction</h2>
+                            <h3 class="text-3xl text-white font-black uppercase tracking-tighter mb-12 leading-tight">How much does paperwork <br/> hinder your mission?</h3>
+                            {surveyScore === null ? (
+                                <div class="flex flex-wrap justify-center gap-3">
+                                    {[1, 2, 3, 4, 5].map(num => (
+                                        <button key={num} onClick={() => setSurveyScore(num)} class="w-16 h-16 border-2 border-blue-800 text-blue-300 text-xl font-black hover:border-[#FFC72C] hover:text-[#FFC72C] transition-all rounded-sm flex items-center justify-center bg-blue-900/50">{num}</button>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div class="bg-white p-10 rounded-sm shadow-2xl inline-block animate-in zoom-in">
+                                    <Icon name="gauge" size={40} className="mx-auto text-[#C8102E] mb-6" />
+                                    <p class="text-xl font-black text-slate-900 uppercase mb-2">{surveyScore > 3 ? "High Friction Detected" : "Maintain Ops"}</p>
+                                    <p class="text-slate-500 text-sm font-medium mb-6">{surveyScore > 3 ? "Your unit is a prime candidate for modernization. Let's fix it." : "Your unit is running lean. Join us as a Fellow to help others!"}</p>
+                                    <button onClick={() => setSurveyScore(null)} class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200">Reset Gauge</button>
+                                </div>
+                            )}
+                        </div>
+                    </section>
+                </div>
+            );
 
-      {/* Pilot Timeline Infographic (Slide 11) */}
-      <div className="mt-32">
-         <h4 className="text-xs font-black text-[#003087] uppercase tracking-[0.5em] mb-12 text-center">Pilot Timeline (First 90 Days)</h4>
-         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { days: '0-15', task: 'Collect Problems', color: 'bg-slate-100' },
-              { days: '15-30', task: 'Select Team', color: 'bg-slate-100' },
-              { days: '30-60', task: 'Sprint Cycle', color: 'bg-[#FFC72C]/20' },
-              { days: '60-90', task: 'Demo & Report', color: 'bg-[#003087] text-white' },
-            ].map((milestone, i) => (
-              <div key={i} className={`p-6 rounded-xl border border-slate-200 ${milestone.color} flex flex-col justify-between aspect-square md:aspect-auto`}>
-                 <span className="text-[10px] font-black uppercase opacity-60 tracking-widest">Day {milestone.days}</span>
-                 <p className="text-lg font-black uppercase tracking-tighter leading-none mt-4">{milestone.task}</p>
-              </div>
-            ))}
-         </div>
-      </div>
-    </div>
-  );
+            const ProcessPage = () => (
+                <div class="max-w-4xl mx-auto px-6 py-24">
+                    <div class="text-center mb-24">
+                        <div class="w-12 h-1 bg-[#C8102E] mx-auto mb-8"></div>
+                        <h2 class="text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-4">How we build <br /> for you</h2>
+                        <p class="text-slate-500 font-bold uppercase text-[10px] tracking-[0.4em]">6 Simple Steps to Modernized Readiness</p>
+                    </div>
 
-  const Library = () => (
-    <div className="max-w-6xl mx-auto px-6 py-24">
-      <div className="text-center mb-24">
-        <div className="w-12 h-1 bg-[#FFC72C] mx-auto mb-8"></div>
-        <h2 className="text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-4 italic">Flight Library</h2>
-        <p className="text-slate-500 font-bold uppercase text-[10px] tracking-[0.4em]">Field Guides for Citizen Developers</p>
-      </div>
+                    <div class="mb-24 flex flex-wrap items-center justify-between gap-8">
+                        {['Define', 'Develop', 'Build', 'Test', 'Deploy'].map((item, i) => (
+                            <div key={i} class="flex flex-col items-center group">
+                                <div class="w-16 h-16 rounded-full bg-slate-50 border-2 border-slate-200 flex items-center justify-center text-[#003087] group-hover:bg-[#FFC72C] transition-all">
+                                    <span class="font-black">{i+1}</span>
+                                </div>
+                                <p class="mt-4 text-[10px] font-black uppercase text-[#003087]">{item}</p>
+                            </div>
+                        ))}
+                    </div>
 
-      <div className="grid md:grid-cols-3 gap-8">
-         {[
-           { title: 'Innovation Playbook', sub: 'Standard Methodology', icon: BookOpen, accent: 'bg-[#003087]', content: 'Learn the Product Approach used by the State of California and the Innovation Fellows.' },
-           { title: 'Power App Guide', sub: 'Rapid Development', icon: Layout, accent: 'bg-[#C8102E]', content: 'Strategic and tactical knowledge to build trackers, forms, and info hubs.' },
-           { title: 'Power BI Flight Brief', sub: 'Data Dominance', icon: BarChart3, accent: 'bg-[#FFC72C]', content: 'Transform raw data into a Common Operational Picture using Star Schema modeling.' },
-           { title: 'Automation Mission', sub: 'Power Automate', icon: Zap, accent: 'bg-[#003087]', content: 'Building your first automated workflow to accelerate unit communication.' },
-           { title: 'Process Mapping', sub: 'Tactical Recon', icon: Search, accent: 'bg-slate-900', content: 'Step-by-step field guide to identifying friction and mapping pain points.' },
-           { title: 'Success Metrics', sub: 'Measuring Impact', icon: Gauge, accent: 'bg-slate-400', content: 'Understanding KPIs: From simple outputs to mission-critical outcomes.' },
-         ].map((guide, i) => (
-           <div key={i} className="bg-white border-2 border-slate-50 rounded-2xl p-8 hover:shadow-2xl transition-all group flex flex-col h-full">
-              <div className={`w-12 h-12 ${guide.accent} text-white flex items-center justify-center rounded-xl mb-6 shadow-lg`}>
-                 <guide.icon size={22} />
-              </div>
-              <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest mb-1">{guide.sub}</p>
-              <h4 className="text-xl font-black text-slate-900 uppercase tracking-tighter mb-4">{guide.title}</h4>
-              <p className="text-slate-500 text-sm font-medium leading-relaxed flex-grow">{guide.content}</p>
-              <div className="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between text-[#003087]">
-                 <span className="text-[10px] font-black uppercase tracking-widest">Download Guide</span>
-                 <ArrowRight size={16} />
-              </div>
-           </div>
-         ))}
-      </div>
-    </div>
-  );
+                    <div class="space-y-4">
+                        {[
+                            { title: "Define the Battlefield", desc: "We sit with you to see the problem from your perspective. No guessing." },
+                            { title: "Design the Brief", desc: "We map the exact pain points and identify the simplest path to success." },
+                            { title: "Rapid 30-Day Sprint", desc: "The Innovation Cell builds a functional working prototype in weeks, not years." },
+                            { title: "Enterprise Tools", desc: "We use the platform you already own: Power BI, Power Apps, and SharePoint." },
+                            { title: "Test Under Fire", desc: "You use the tool while you work. If it's hard to use, we fix it immediately." },
+                            { title: "Deploy & Iterate", desc: "The tool goes live and we keep improving it based on your feedback." }
+                        ].map((step, i) => (
+                            <div key={i} class="flex gap-6 p-8 bg-slate-50 border border-slate-200 rounded-lg hover:bg-white transition-all group">
+                                <span class="text-4xl font-black text-[#003087]/10 group-hover:text-[#FFC72C]">0{i + 1}</span>
+                                <div>
+                                    <h4 class="text-sm font-black text-slate-900 uppercase tracking-widest mb-2">{step.title}</h4>
+                                    <p class="text-slate-500 text-sm font-medium">{step.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
 
-  const SubmitForm = () => (
-    <div className="max-w-4xl mx-auto px-6 py-24">
-      <div className="bg-white shadow-2xl rounded-sm overflow-hidden border border-slate-200">
-        <div className="bg-[#003087] py-12 px-8 text-white relative">
-           <h2 className="text-4xl font-black uppercase tracking-tighter mb-2 italic">Submit a mission bottleneck</h2>
-           <p className="text-blue-200 text-[10px] font-bold uppercase tracking-[0.4em]">Tell us what needs fixing</p>
-        </div>
-        
-        <form className="p-8 md:p-12 space-y-10" onSubmit={(e) => { e.preventDefault(); alert("Mission request submitted for evaluation."); }}>
-          <div className="grid md:grid-cols-2 gap-10">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">What is your name?</label>
-              <input type="text" className="w-full bg-slate-50 border-b-2 border-slate-200 px-4 py-4 focus:border-[#003087] outline-none font-bold text-slate-800" placeholder="e.g. MSgt Snuffy" required />
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">What is your unit?</label>
-              <input type="text" className="w-full bg-slate-50 border-b-2 border-slate-200 px-4 py-4 focus:border-[#003087] outline-none font-bold text-slate-800" placeholder="e.g. 144th FW" required />
-            </div>
-          </div>
-          
-          <div className="space-y-2">
-            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest uppercase">Describe the manual bottleneck</label>
-            <p className="text-[10px] text-slate-400 mb-2 italic">Tell us about the spreadsheet, email chain, or manual task that wastes your time.</p>
-            <textarea rows="5" className="w-full bg-slate-50 border-2 border-slate-100 p-4 focus:border-[#003087] outline-none font-medium text-slate-800 resize-none" required></textarea>
-          </div>
+            const LibraryPage = () => (
+                <div class="max-w-6xl mx-auto px-6 py-24">
+                    <div class="text-center mb-24">
+                        <div class="w-12 h-1 bg-[#FFC72C] mx-auto mb-8"></div>
+                        <h2 class="text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-4 italic">Flight Library</h2>
+                        <p class="text-slate-500 font-bold uppercase text-[10px] tracking-[0.4em]">Strategic Field Guides</p>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        {[
+                            { title: 'Innovation Playbook', sub: 'The Product Approach', icon: 'book-open', accent: 'bg-[#003087]' },
+                            { title: 'Power App Guide', sub: 'Rapid Application Build', icon: 'layout', accent: 'bg-[#C8102E]' },
+                            { title: 'Power BI Briefing', sub: 'Data Dominance', icon: 'bar-chart-3', accent: 'bg-[#FFC72C]' },
+                            { title: 'Automation Mission', sub: 'Power Automate', icon: 'zap', accent: 'bg-[#003087]' },
+                            { title: 'Tactical Recon', sub: 'Process Mapping', icon: 'search', accent: 'bg-slate-900' },
+                            { title: 'Success Metrics', sub: 'Outputs to Outcomes', icon: 'gauge', accent: 'bg-slate-400' },
+                        ].map((guide, i) => (
+                            <div key={i} class="bg-white border-2 border-slate-50 rounded-2xl p-8 hover:shadow-2xl transition-all flex flex-col group h-full cursor-pointer">
+                                <div class={`w-12 h-12 ${guide.accent} text-white flex items-center justify-center rounded-xl mb-6 shadow-lg`}>
+                                    <Icon name={guide.icon} size={22} />
+                                </div>
+                                <p class="text-[10px] font-black uppercase text-slate-400 mb-1">{guide.sub}</p>
+                                <h4 class="text-xl font-black text-slate-900 uppercase tracking-tighter mb-4">{guide.title}</h4>
+                                <div class="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between text-[#003087] font-black uppercase text-[10px]">
+                                    <span>Download Resource</span>
+                                    <Icon name="arrow-right" size={16} />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
 
-          <div className="bg-slate-50 p-6 rounded-lg">
-             <p className="text-[10px] font-black text-[#003087] uppercase mb-4">How will fixing this help the mission?</p>
-             <div className="grid md:grid-cols-3 gap-4">
-                {['Save time', 'Reduce mistakes', 'Better visibility'].map(tag => (
-                  <label key={tag} className="flex items-center gap-3 cursor-pointer">
-                     <input type="checkbox" className="w-5 h-5 accent-[#003087]" />
-                     <span className="text-[10px] font-black text-slate-600 uppercase">{tag}</span>
-                  </label>
-                ))}
-             </div>
-          </div>
+            const SubmitPage = () => (
+                <div class="max-w-4xl mx-auto px-6 py-24">
+                    <div class="bg-white shadow-2xl rounded-sm overflow-hidden border border-slate-200">
+                        <div class="bg-[#003087] py-12 px-8 text-white relative">
+                            <h2 class="text-4xl font-black uppercase tracking-tighter mb-2 italic">Fix a mission process</h2>
+                            <p class="text-blue-200 text-[10px] font-bold uppercase tracking-[0.4em]">Submit a Modernization Request</p>
+                        </div>
+                        <form class="p-8 md:p-12 space-y-10" onSubmit={(e) => { e.preventDefault(); alert("Modernization request submitted for review."); }}>
+                            <div class="grid md:grid-cols-2 gap-10">
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest text-left block">Operator Name / Rank</label>
+                                    <input type="text" class="w-full bg-slate-50 border-b-2 border-slate-200 px-4 py-4 focus:border-[#003087] outline-none font-bold text-slate-800" required />
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest text-left block">Assigned Unit</label>
+                                    <input type="text" class="w-full bg-slate-50 border-b-2 border-slate-200 px-4 py-4 focus:border-[#003087] outline-none font-bold text-slate-800" required />
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block text-left uppercase tracking-[0.2em]">Describe the manual bottleneck</label>
+                                <p class="text-[11px] text-slate-400 mb-2 font-medium">What is the spreadsheet, email chain, or manual task that wastes the most time?</p>
+                                <textarea rows="5" class="w-full bg-slate-50 border-2 border-slate-100 p-4 focus:border-[#003087] outline-none font-medium text-slate-800 resize-none" required></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-[#FFC72C] text-[#003087] font-black py-6 text-sm uppercase tracking-[0.2em] shadow-lg hover:bg-[#ffe082] transition-all rounded-sm">
+                                Submit for modernization
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            );
 
-          <button type="submit" className="w-full bg-[#FFC72C] text-[#003087] font-black py-6 text-sm uppercase tracking-[0.2em] shadow-lg hover:bg-[#ffe082] transition-all rounded-sm">
-             Send mission request
-          </button>
-        </form>
-      </div>
-    </div>
-  );
+            const JoinPage = () => (
+                <div class="max-w-4xl mx-auto px-6 py-24">
+                    <div class="text-center mb-20">
+                        <h2 class="text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-6">Build the <br /> Future</h2>
+                        <p class="text-slate-600 font-medium max-w-xl mx-auto leading-relaxed">We need 6-10 Airmen for our next fellowship cycle. Bring a problem from your unit; leave with a modernization roadmap.</p>
+                    </div>
+                    <div class="bg-[#003087] p-8 md:p-16 rounded-2xl relative shadow-2xl overflow-hidden">
+                        <form class="space-y-12 relative z-10" onSubmit={(e) => { e.preventDefault(); alert("Interest registered."); }}>
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-black text-blue-200 uppercase tracking-widest block text-left">Military Email (.mil)</label>
+                                <input type="email" placeholder="jane.doe@us.af.mil" class="w-full bg-transparent border-b-4 border-blue-400/30 py-4 outline-none focus:border-[#FFC72C] transition-colors text-2xl font-black tracking-tight text-white placeholder-blue-300" required />
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-12">
+                                <div class="space-y-2">
+                                    <label class="text-[10px] font-black text-blue-200 uppercase tracking-widest block text-left">What is your AFSC?</label>
+                                    <input type="text" placeholder="e.g. 17S, 3F5, 2A6" class="w-full bg-transparent border-b-4 border-blue-400/30 py-4 outline-none focus:border-[#FFC72C] transition-colors text-2xl font-black text-white" required />
+                                </div>
+                                <div class="space-y-4 pt-2">
+                                    <div class="flex items-center gap-3 text-blue-100 text-[10px] font-black uppercase"><div class="w-2 h-2 rounded-full bg-[#FFC72C]"></div> 4 Hours/Week Commitment</div>
+                                    <div class="flex items-center gap-3 text-blue-100 text-[10px] font-black uppercase"><div class="w-2 h-2 rounded-full bg-[#FFC72C]"></div> Work on real Wing problems</div>
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-white text-[#003087] font-black py-6 text-sm uppercase tracking-[0.3em] rounded-sm shadow-xl hover:bg-slate-50 transition-all">Tell us you're interested</button>
+                        </form>
+                    </div>
+                </div>
+            );
 
-  const JoinForm = () => (
-    <div className="max-w-4xl mx-auto px-6 py-24">
-      <div className="text-center mb-20">
-        <h2 className="text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-6">Build the <br /> Future</h2>
-        <p className="text-slate-600 font-medium max-w-xl mx-auto">
-          We need 6-10 Airmen for our next team. You don't need to be a tech expert. You just need to know your mission and want to make it better.
-        </p>
-      </div>
+            return (
+                <div class="min-h-screen">
+                    <Nav />
+                    <main>
+                        {activeTab === 'home' && <HomePage />}
+                        {activeTab === 'process' && <ProcessPage />}
+                        {activeTab === 'library' && <LibraryPage />}
+                        {activeTab === 'submit' && <SubmitPage />}
+                        {activeTab === 'join' && <JoinPage />}
+                    </main>
+                    <footer class="bg-slate-50 border-t border-slate-200 py-24 px-6 relative mt-20">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-[#C8102E]"></div>
+                        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                            <div class="flex items-center gap-4">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/California_Air_National_Guard_USAF_patch.svg" alt="CA ANG" class="w-10 h-10 grayscale opacity-40" />
+                                <span>HQ California Air National Guard • 2026</span>
+                            </div>
+                            <div class="flex gap-8">
+                                <span>Built for Mission Execution</span>
+                                <span>Modernization Initiative</span>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
 
-      <div className="bg-[#003087] p-8 md:p-16 rounded-2xl relative shadow-2xl overflow-hidden">
-        <form className="space-y-12 relative z-10" onSubmit={(e) => { e.preventDefault(); alert("We'll contact you soon."); }}>
-          <div className="space-y-2">
-            <label className="text-[10px] font-black text-blue-200 uppercase tracking-widest">What is your military email?</label>
-            <input type="email" placeholder="jane.doe@us.af.mil" className="w-full bg-transparent border-b-4 border-blue-400/30 py-4 outline-none focus:border-[#FFC72C] transition-colors text-2xl font-black tracking-tight text-white" required />
-          </div>
-          <div className="grid md:grid-cols-2 gap-12">
-            <div className="space-y-2">
-              <label className="text-[10px] font-black text-blue-200 uppercase tracking-widest">What is your AFSC?</label>
-              <input 
-                type="text" 
-                placeholder="e.g. 17S, 3F5, 2A6" 
-                className="w-full bg-transparent border-b-4 border-blue-400/30 py-4 outline-none focus:border-[#FFC72C] transition-colors text-2xl font-black tracking-tight text-white placeholder-blue-300" 
-                required 
-              />
-            </div>
-            <div className="space-y-4 pt-2">
-              <div className="flex items-center gap-3">
-                 <div className="w-2 h-2 rounded-full bg-[#FFC72C]"></div>
-                 <span className="text-[10px] font-black uppercase tracking-widest text-blue-100">4 Hours/Week Commitment</span>
-              </div>
-              <div className="flex items-center gap-3">
-                 <div className="w-2 h-2 rounded-full bg-[#FFC72C]"></div>
-                 <span className="text-[10px] font-black uppercase tracking-widest text-blue-100">Work on your unit's problems</span>
-              </div>
-            </div>
-          </div>
-          <button type="submit" className="w-full bg-white text-[#003087] font-black py-6 text-sm uppercase tracking-[0.3em] rounded-sm shadow-xl hover:bg-slate-50">
-            Tell us you're interested
-          </button>
-        </form>
-      </div>
-    </div>
-  );
-
-  const Footer = () => (
-    <footer className="bg-slate-50 border-t border-slate-200 py-24 px-6 relative">
-      <div className="absolute top-0 left-0 w-full h-1 bg-[#C8102E]"></div>
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-        <div className="flex items-center gap-6 group">
-          <img 
-            src="https://upload.wikimedia.org/wikipedia/commons/e/e0/California_Air_National_Guard_USAF_patch.svg" 
-            alt="CA ANG" 
-            className="w-16 h-16 grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" 
-          />
-          <div className="flex flex-col">
-            <span className="text-sm font-black uppercase tracking-[0.2em] text-slate-900">CA ANG Innovation Cell</span>
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Built by Airmen for better mission execution</span>
-          </div>
-        </div>
-        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-          HQ California Air National Guard • 2026
-        </div>
-      </div>
-    </footer>
-  );
-
-  return (
-    <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-[#FFC72C] selection:text-[#003087]">
-      <Nav />
-      <main className="animate-in fade-in duration-1000">
-        {activeTab === 'home' && <Home />}
-        {activeTab === 'process' && <Process />}
-        {activeTab === 'library' && <Library />}
-        {activeTab === 'submit' && <SubmitForm />}
-        {activeTab === 'join' && <JoinForm />}
-      </main>
-      <Footer />
-    </div>
-  );
-};
-
-export default App;
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
