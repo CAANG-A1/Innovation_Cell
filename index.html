@@ -15,50 +15,56 @@
         body { 
             font-family: 'Plus+Jakarta+Sans', sans-serif; 
             scroll-behavior: smooth; 
-            background-color: #f8fafc;
+            background-color: #ffffff;
+            font-size: 16px;
         }
 
         .hero-gradient {
-            background: radial-gradient(circle at top right, rgba(255, 199, 44, 0.08), transparent),
-                        radial-gradient(circle at bottom left, rgba(0, 48, 135, 0.05), transparent);
+            background: radial-gradient(circle at 0% 0%, rgba(0, 48, 135, 0.04) 0%, transparent 50%),
+                        radial-gradient(circle at 100% 100%, rgba(255, 199, 44, 0.06) 0%, transparent 50%);
         }
 
         .card-shadow {
-            box-shadow: 0 10px 25px -5px rgba(0, 48, 135, 0.05), 0 8px 10px -6px rgba(0, 48, 135, 0.05);
+            box-shadow: 0 10px 30px -5px rgba(0, 48, 135, 0.05);
         }
 
         .glass {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
 
-        .pulse-accent {
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: .5; }
-        }
-
         .animate-slide-up {
-            animation: slideUp 0.6s ease-out forwards;
+            animation: slideUp 0.5s ease-out forwards;
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-link-active {
+            position: relative;
+            color: #003087 !important;
+        }
+        .nav-link-active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #003087;
+            border-radius: 2px;
         }
     </style>
 </head>
-<body class="text-slate-900">
+<body class="text-slate-900 antialiased">
     <div id="root"></div>
 
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // Simplified Icon Component
         const Icon = ({ name, size = 20, className = "" }) => {
             useEffect(() => {
                 if (window.lucide) window.lucide.createIcons();
@@ -83,50 +89,45 @@
                 <nav class="glass border-b border-slate-200 sticky top-0 z-50">
                     <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                         <div class="flex items-center gap-4 cursor-pointer group" onClick={() => setActiveTab('home')}>
-                            <div class="relative w-12 h-12 flex items-center justify-center transform group-hover:scale-110 transition-transform">
-                                <div class="absolute -inset-1 bg-[#FFC72C] rounded-full blur opacity-20"></div>
+                            <div class="relative w-12 h-12 flex items-center justify-center">
                                 <img src="CAANG%20flash.png" alt="CA ANG" class="w-10 h-10 relative object-contain" />
                             </div>
                             <div class="flex flex-col">
-                                <span class="font-extrabold text-lg tracking-tighter leading-none">CA ANG</span>
-                                <span class="text-[10px] uppercase font-bold text-[#003087] tracking-widest">Innovation Cell</span>
+                                <span class="font-extrabold text-lg tracking-tight leading-none text-slate-900">CA ANG</span>
+                                <span class="text-xs uppercase font-bold text-[#003087] tracking-widest mt-0.5">Innovation Cell</span>
                             </div>
                         </div>
 
-                        {/* Desktop Nav */}
-                        <div class="hidden md:flex gap-1">
+                        <div class="hidden lg:flex gap-8">
                             {navigation.map(tab => (
                                 <button 
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
-                                    class={`px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
-                                        activeTab === tab.id ? 'bg-[#003087] text-white shadow-lg' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900'
+                                    class={`relative py-1 text-sm font-bold uppercase tracking-wider transition-all hover:text-[#003087] ${
+                                        activeTab === tab.id ? 'nav-link-active' : 'text-slate-500'
                                     }`}
                                 >
-                                    <Icon name={tab.icon} size={14} />
                                     {tab.label}
                                 </button>
                             ))}
                         </div>
 
-                        {/* Mobile Toggle */}
-                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} class="md:hidden p-2 text-slate-900">
-                            <Icon name={isMenuOpen ? "x" : "menu"} size={24} />
+                        <button onClick={() => setIsMenuOpen(!isMenuOpen)} class="lg:hidden p-2 text-slate-900">
+                            <Icon name={isMenuOpen ? "x" : "menu"} size={28} />
                         </button>
                     </div>
 
-                    {/* Mobile Menu */}
                     {isMenuOpen && (
-                        <div class="md:hidden bg-white border-t p-6 space-y-2 animate-slide-up shadow-2xl">
+                        <div class="lg:hidden bg-white border-t p-6 space-y-3 animate-slide-up shadow-2xl">
                             {navigation.map(tab => (
                                 <button 
                                     key={tab.id}
                                     onClick={() => { setActiveTab(tab.id); setIsMenuOpen(false); }}
-                                    class={`w-full flex items-center gap-4 px-4 py-4 rounded-xl font-bold uppercase text-xs tracking-widest ${
-                                        activeTab === tab.id ? 'bg-[#003087] text-white' : 'bg-slate-50 text-slate-500'
+                                    class={`w-full flex items-center gap-4 px-5 py-4 rounded-xl font-bold text-sm tracking-wide ${
+                                        activeTab === tab.id ? 'bg-blue-50 text-[#003087]' : 'text-slate-600 hover:bg-slate-50'
                                     }`}
                                 >
-                                    <Icon name={tab.icon} size={18} />
+                                    <Icon name={tab.icon} size={20} />
                                     {tab.label}
                                 </button>
                             ))}
@@ -136,100 +137,117 @@
             );
 
             const HomePage = () => (
-                <div class="space-y-24 pb-20 hero-gradient">
-                    {/* Hero Section */}
-                    <section class="max-w-6xl mx-auto px-6 pt-20 text-center">
-                        <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#FFC72C]/10 border border-[#FFC72C]/30 rounded-full text-[#003087] text-[10px] font-black uppercase tracking-widest mb-8 animate-slide-up">
-                            <span class="w-2 h-2 rounded-full bg-[#FFC72C] pulse-accent"></span>
-                            Building Tools for Airmen
+                <div class="space-y-32 pb-32 hero-gradient">
+                    <section class="max-w-6xl mx-auto px-6 pt-24 text-center">
+                        <div class="inline-flex items-center gap-3 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full text-[#003087] text-sm font-bold uppercase tracking-wider mb-10 animate-slide-up">
+                            <Icon name="shield-check" size={16} />
+                            Building Digital Tools for Airmen
                         </div>
-                        <h1 class="text-6xl md:text-8xl font-black tracking-tight leading-[0.85] text-slate-900 mb-8 animate-slide-up">
+                        <h1 class="text-6xl md:text-8xl font-black tracking-tight leading-[1.1] text-slate-900 mb-10 animate-slide-up">
                             Stop fighting data. <br/>
-                            <span class="text-[#003087]">Start moving the mission.</span>
+                            <span class="text-[#003087]">Move the mission.</span>
                         </h1>
-                        <p class="text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed font-medium animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                            We take the slow, boring parts of your job—like tracking spreadsheets or moving paperwork—and build simple digital tools that do the work for you. 
+                        <p class="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto mb-14 leading-relaxed font-medium animate-slide-up" style={{ animationDelay: '0.1s' }}>
+                            We replace slow, manual workflows with simple digital apps that work for you, not against you. 
                         </p>
-                        <div class="flex flex-col sm:flex-row justify-center gap-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-                            <button onClick={() => setActiveTab('submit')} class="px-8 py-5 bg-[#003087] text-white rounded-2xl font-black uppercase text-xs tracking-widest hover:scale-105 transition-all shadow-xl flex items-center justify-center gap-3">
-                                Fix my process <Icon name="arrow-right" size={18} />
+                        <div class="flex flex-col sm:flex-row justify-center gap-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+                            <button onClick={() => setActiveTab('submit')} class="px-10 py-5 bg-[#003087] text-white rounded-2xl font-bold uppercase text-sm tracking-widest hover:bg-[#002147] transition-all shadow-xl hover:shadow-2xl hover:scale-[1.02] flex items-center justify-center gap-3">
+                                Fix my process <Icon name="arrow-right" size={20} />
                             </button>
-                            <button onClick={() => setActiveTab('process')} class="px-8 py-5 bg-white border-2 border-slate-200 text-slate-600 rounded-2xl font-black uppercase text-xs tracking-widest hover:border-[#FFC72C] transition-all flex items-center justify-center gap-3">
-                                How we build it <Icon name="eye" size={18} />
+                            <button onClick={() => setActiveTab('library')} class="px-10 py-5 bg-white border-2 border-slate-200 text-slate-700 rounded-2xl font-bold uppercase text-sm tracking-widest hover:border-[#FFC72C] transition-all flex items-center justify-center gap-3">
+                                View Field Guides
                             </button>
                         </div>
                     </section>
 
-                    {/* Comparison Cards */}
                     <section class="max-w-6xl mx-auto px-6">
-                        <div class="grid md:grid-cols-2 gap-8 items-stretch">
-                            <div class="bg-white p-10 rounded-3xl border border-slate-100 card-shadow flex flex-col h-full">
-                                <div class="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 mb-6">
-                                    <Icon name="clock-3" size={24} />
+                        <div class="grid md:grid-cols-2 gap-10 items-stretch">
+                            <div class="bg-slate-50 p-12 rounded-[2.5rem] border border-slate-200/60 flex flex-col h-full shadow-sm">
+                                <div class="w-14 h-14 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-400 mb-8 shadow-sm">
+                                    <Icon name="clock" size={28} />
                                 </div>
-                                <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-4">The Old Way</h3>
-                                <ul class="space-y-4 font-medium text-slate-500">
-                                    <li class="flex items-start gap-3"><Icon name="x" size={16} className="mt-1 text-slate-300" /> Slow spreadsheets that everyone edits at once.</li>
-                                    <li class="flex items-start gap-3"><Icon name="x" size={16} className="mt-1 text-slate-300" /> Chasing down emails for simple status updates.</li>
-                                    <li class="flex items-start gap-3"><Icon name="x" size={16} className="mt-1 text-slate-300" /> Manual counts that lead to human errors.</li>
+                                <h3 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-2">The Current Way</h3>
+                                <h4 class="text-3xl font-extrabold tracking-tight text-slate-800 mb-10">The Paper Burden</h4>
+                                <ul class="space-y-8 font-medium text-slate-600">
+                                    <li class="flex items-start gap-5">
+                                        <div class="w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><Icon name="x" size={14} /></div>
+                                        <span class="text-lg">Manual spreadsheets that take hours to update.</span>
+                                    </li>
+                                    <li class="flex items-start gap-5">
+                                        <div class="w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><Icon name="x" size={14} /></div>
+                                        <span class="text-lg">Chasing down status updates through email chains.</span>
+                                    </li>
+                                    <li class="flex items-start gap-5">
+                                        <div class="w-6 h-6 bg-red-100 text-red-600 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><Icon name="x" size={14} /></div>
+                                        <span class="text-lg">Data errors caused by manual hand-offs and typing.</span>
+                                    </li>
                                 </ul>
                             </div>
-                            <div class="bg-[#003087] p-10 rounded-3xl text-white shadow-2xl flex flex-col h-full">
-                                <div class="w-12 h-12 bg-[#FFC72C] rounded-xl flex items-center justify-center text-[#003087] mb-6 shadow-lg">
-                                    <Icon name="zap" size={24} />
+
+                            <div class="bg-white p-12 rounded-[2.5rem] border-2 border-blue-50 card-shadow flex flex-col h-full relative overflow-hidden">
+                                <div class="absolute top-0 right-0 w-48 h-48 bg-[#FFC72C]/5 rounded-full -mr-20 -mt-20"></div>
+                                <div class="w-14 h-14 bg-[#003087] rounded-2xl flex items-center justify-center text-[#FFC72C] mb-8 shadow-lg">
+                                    <Icon name="zap" size={28} />
                                 </div>
-                                <h3 class="text-sm font-black text-[#FFC72C] uppercase tracking-widest mb-4">The Modern Way</h3>
-                                <ul class="space-y-4 font-bold">
-                                    <li class="flex items-start gap-3"><Icon name="check-circle" size={16} className="mt-1 text-[#FFC72C]" /> Real-time apps that work on tablets and phones.</li>
-                                    <li class="flex items-start gap-3"><Icon name="check-circle" size={16} className="mt-1 text-[#FFC72C]" /> Automated alerts so you never miss a deadline.</li>
-                                    <li class="flex items-start gap-3"><Icon name="check-circle" size={16} className="mt-1 text-[#FFC72C]" /> Clean dashboards for leaders to see progress instantly.</li>
+                                <h3 class="text-sm font-black text-[#003087] uppercase tracking-widest mb-2">The Innovation Way</h3>
+                                <h4 class="text-3xl font-extrabold tracking-tight text-slate-900 mb-10">The Modern Fix</h4>
+                                <ul class="space-y-8 font-bold text-slate-700">
+                                    <li class="flex items-start gap-5">
+                                        <div class="w-6 h-6 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><Icon name="check" size={14} /></div>
+                                        <span class="text-lg">Live apps that work on tablets and mobile devices.</span>
+                                    </li>
+                                    <li class="flex items-start gap-5">
+                                        <div class="w-6 h-6 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><Icon name="check" size={14} /></div>
+                                        <span class="text-lg">Automated notifications so you never miss a deadline.</span>
+                                    </li>
+                                    <li class="flex items-start gap-5">
+                                        <div class="w-6 h-6 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"><Icon name="check" size={14} /></div>
+                                        <span class="text-lg">Live dashboards showing mission readiness instantly.</span>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                     </section>
 
-                    {/* Friction Gauge Section */}
-                    <section class="bg-slate-900 py-24 text-white relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-64 h-64 bg-[#003087] blur-[120px] opacity-40"></div>
-                        <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
-                            <h2 class="text-sm font-black text-blue-400 uppercase tracking-[0.4em] mb-4">Self-Assessment</h2>
-                            <h3 class="text-4xl md:text-5xl font-black tracking-tight mb-8">Is your unit stuck?</h3>
-                            <p class="text-blue-100/60 mb-12 max-w-xl mx-auto">On a scale of 1 to 5, how much does manual paperwork slow down your team every single day?</p>
-                            
-                            {surveyScore === null ? (
-                                <div class="flex flex-wrap justify-center gap-4">
-                                    {[1, 2, 3, 4, 5].map(num => (
-                                        <button 
-                                            key={num} 
-                                            onClick={() => setSurveyScore(num)}
-                                            class="w-20 h-20 rounded-2xl border-2 border-blue-900 bg-blue-950 flex flex-col items-center justify-center group hover:border-[#FFC72C] hover:bg-[#FFC72C]/10 transition-all"
-                                        >
-                                            <span class="text-3xl font-black group-hover:text-[#FFC72C]">{num}</span>
-                                            <span class="text-[9px] font-bold text-blue-500 uppercase mt-1">
-                                                {num === 1 ? 'Low' : num === 5 ? 'High' : ''}
-                                            </span>
-                                        </button>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div class="bg-white p-12 rounded-[2rem] text-slate-900 animate-slide-up shadow-2xl inline-block max-w-lg">
-                                    <div class="w-16 h-16 bg-[#C8102E]/10 text-[#C8102E] rounded-2xl flex items-center justify-center mx-auto mb-6">
-                                        <Icon name="gauge" size={32} />
+                    <section class="max-w-4xl mx-auto px-6 text-center">
+                        <div class="bg-slate-50 border border-slate-200/60 p-16 md:p-24 rounded-[3.5rem] relative overflow-hidden">
+                            <div class="relative z-10">
+                                <h2 class="text-sm font-black text-[#003087] uppercase tracking-[0.4em] mb-6">Self-Assessment</h2>
+                                <h3 class="text-4xl md:text-5xl font-black tracking-tight text-slate-900 mb-8 leading-tight">Is your unit stuck?</h3>
+                                <p class="text-lg text-slate-600 mb-14 max-w-xl mx-auto font-medium">On a scale of 1 to 5, how much does manual paperwork slow down your team every day?</p>
+                                
+                                {surveyScore === null ? (
+                                    <div class="flex flex-wrap justify-center gap-6">
+                                        {[1, 2, 3, 4, 5].map(num => (
+                                            <button 
+                                                key={num} 
+                                                onClick={() => setSurveyScore(num)}
+                                                class="w-20 h-20 rounded-3xl bg-white border-2 border-slate-100 text-slate-400 font-extrabold hover:border-[#003087] hover:text-[#003087] hover:scale-110 transition-all flex items-center justify-center text-3xl shadow-sm hover:shadow-md"
+                                            >
+                                                {num}
+                                            </button>
+                                        ))}
                                     </div>
-                                    <h4 class="text-2xl font-black tracking-tight mb-2">
-                                        {surveyScore > 3 ? "Your unit is ready for change." : "Your unit is running lean!"}
-                                    </h4>
-                                    <p class="text-slate-500 font-medium mb-8">
-                                        {surveyScore > 3 
-                                            ? "High friction detected. This means your team is spending too much time on paperwork. We should fix it." 
-                                            : "You're ahead of the curve! Consider joining us as a Fellow to help other units reach this level."}
-                                    </p>
-                                    <div class="flex flex-col gap-3">
-                                        <button onClick={() => setActiveTab('submit')} class="w-full py-4 bg-[#003087] text-white rounded-xl font-bold uppercase text-xs tracking-widest shadow-lg">Submit a Request</button>
-                                        <button onClick={() => setSurveyScore(null)} class="text-xs font-bold text-slate-400 uppercase tracking-widest hover:text-slate-900 transition-colors">Reset Gauge</button>
+                                ) : (
+                                    <div class="animate-slide-up bg-white p-12 rounded-[2rem] card-shadow inline-block max-w-md border border-blue-50">
+                                        <div class="w-16 h-16 bg-blue-50 text-[#003087] rounded-2xl flex items-center justify-center mx-auto mb-8 shadow-sm">
+                                            <Icon name="gauge" size={32} />
+                                        </div>
+                                        <h4 class="text-2xl font-extrabold tracking-tight text-slate-900 mb-4">
+                                            {surveyScore > 3 ? "Change is Needed" : "Unit is Running Lean"}
+                                        </h4>
+                                        <p class="text-base text-slate-600 font-medium mb-10 leading-relaxed">
+                                            {surveyScore > 3 
+                                                ? "Manual friction is taking valuable time away from your mission. We have the tools to help you reclaim those hours." 
+                                                : "Excellent. Your unit is high-performing. Help other wings reach this level by joining us as a Fellow."}
+                                        </p>
+                                        <div class="flex flex-col gap-4">
+                                            <button onClick={() => setActiveTab('submit')} class="w-full py-5 bg-[#003087] text-white rounded-xl font-bold uppercase text-sm tracking-widest shadow-lg">Start a Request</button>
+                                            <button onClick={() => setSurveyScore(null)} class="text-sm font-bold text-slate-400 uppercase tracking-widest hover:text-slate-700 transition-colors">Reset Gauge</button>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </section>
                 </div>
@@ -237,30 +255,29 @@
 
             const ProcessPage = () => (
                 <div class="max-w-6xl mx-auto px-6 py-24">
-                    <div class="text-center mb-20">
-                        <h2 class="text-sm font-black text-[#003087] uppercase tracking-[0.4em] mb-4">How we build</h2>
-                        <h3 class="text-5xl md:text-6xl font-black tracking-tight mb-6">6 Steps to Success</h3>
-                        <p class="text-slate-500 max-w-2xl mx-auto font-medium">We don't build software based on guesses. We build it by listening to the Airmen who actually use it.</p>
+                    <div class="text-center mb-24">
+                        <h2 class="text-sm font-black text-[#003087] uppercase tracking-[0.4em] mb-6">Execution Model</h2>
+                        <h3 class="text-5xl md:text-7xl font-black tracking-tight text-slate-900 mb-8">6 Steps to Success</h3>
+                        <p class="text-xl text-slate-600 max-w-2xl mx-auto font-medium leading-relaxed">We build tools that Airmen actually enjoy using.</p>
                     </div>
 
-                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
                         {[
-                            { step: "01", title: "We Observe", desc: "We sit with you. We watch how you work. We see the friction for ourselves.", icon: "eye" },
-                            { step: "02", title: "We Map It", desc: "We find where the data gets stuck and draw a path to a better way.", icon: "map" },
-                            { step: "03", title: "We Sprint", desc: "We build a working version of the tool in just 30 days.", icon: "fast-forward" },
-                            { step: "04", title: "We Use Your Tools", desc: "We use the Power Platform and SharePoint you already have—no new passwords.", icon: "box" },
-                            { step: "05", title: "We Test Hard", desc: "You use it in real life. If it doesn't work perfectly, we change it instantly.", icon: "shield-alert" },
-                            { step: "06", title: "We Launch", desc: "The tool goes live. We keep improving it as your mission changes.", icon: "rocket" }
+                            { step: "01", title: "We Observe", desc: "We sit with you to see the friction firsthand. We don't guess—we learn your workflow.", icon: "eye" },
+                            { step: "02", title: "We Map It", desc: "We visualize where data is stuck and draw a clear path to a better digital state.", icon: "map" },
+                            { step: "03", title: "We Sprint", desc: "Our team builds a functional, working version of your tool in 30 days or less.", icon: "zap" },
+                            { step: "04", title: "We Use Your Tools", desc: "We build on the Power Platform and SharePoint you already own. No new accounts.", icon: "box" },
+                            { step: "05", title: "We Test Hard", desc: "You use it in the field. If it's slow or confusing, we change it immediately.", icon: "shield-alert" },
+                            { step: "06", title: "We Launch", desc: "The tool goes live wing-wide. We keep iterating based on your ongoing feedback.", icon: "rocket" }
                         ].map(item => (
-                            <div key={item.step} class="bg-white p-8 rounded-3xl border border-slate-100 card-shadow hover:border-[#FFC72C] transition-all group">
-                                <div class="flex items-center justify-between mb-8">
-                                    <div class="w-12 h-12 bg-[#003087]/5 text-[#003087] rounded-xl flex items-center justify-center group-hover:bg-[#FFC72C] group-hover:text-[#003087] transition-all">
-                                        <Icon name={item.icon} size={24} />
-                                    </div>
-                                    <span class="text-4xl font-black text-slate-100 group-hover:text-[#FFC72C]/20 transition-all">{item.step}</span>
+                            <div key={item.step} class="group">
+                                <div class="w-16 h-16 bg-slate-50 text-slate-400 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-[#003087] group-hover:text-white transition-all shadow-sm border border-slate-100">
+                                    <Icon name={item.icon} size={28} />
                                 </div>
-                                <h4 class="text-xl font-extrabold tracking-tight mb-2 text-slate-800">{item.title}</h4>
-                                <p class="text-slate-500 font-medium text-sm leading-relaxed">{item.desc}</p>
+                                <h4 class="text-2xl font-extrabold tracking-tight mb-4 text-slate-900 flex items-center gap-4">
+                                    <span class="text-[#003087]/20 text-lg">{item.step}</span> {item.title}
+                                </h4>
+                                <p class="text-lg text-slate-600 font-medium leading-relaxed">{item.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -269,60 +286,31 @@
 
             const LibraryPage = () => {
                 const guides = [
-                    { 
-                        title: 'Innovation Playbook', 
-                        sub: 'The Product Approach', 
-                        icon: 'book', 
-                        color: 'bg-blue-600',
-                        url: '/Innovation_Cell/guides/Mission_Ready_Innovation_Field_Guide.pdf'
-                    },
-                    { 
-                        title: 'Power App Guide', 
-                        sub: 'Application Deployment', 
-                        icon: 'layout', 
-                        color: 'bg-red-600',
-                        url: '/Innovation_Cell/guides/Mission_Power_App_Deployment.pdf'
-                    },
-                    { 
-                        title: 'Power BI Briefing', 
-                        sub: 'Data Dominance', 
-                        icon: 'bar-chart', 
-                        color: 'bg-[#FFC72C]',
-                        url: '/Innovation_Cell/guides/Data_Dominance_Power_BI_Flight_Briefing.pdf'
-                    },
-                    { 
-                        title: 'Automation Mission', 
-                        sub: 'Power Automate', 
-                        icon: 'zap', 
-                        color: 'bg-slate-900',
-                        url: '/Innovation_Cell/guides/Power_Automate_Mission_Guide.pdf'
-                    }
+                    { title: 'Innovation Playbook', sub: 'The Product Approach', icon: 'book', color: 'bg-slate-900', url: '/Innovation_Cell/guides/Mission_Ready_Innovation_Field_Guide.pdf' },
+                    { title: 'Power App Guide', sub: 'Rapid Deployment', icon: 'layout', color: 'bg-blue-700', url: '/Innovation_Cell/guides/Mission_Power_App_Deployment.pdf' },
+                    { title: 'Power BI Briefing', sub: 'Data Dominance', icon: 'bar-chart', color: 'bg-[#FFC72C]', url: '/Innovation_Cell/guides/Data_Dominance_Power_BI_Flight_Briefing.pdf' },
+                    { title: 'Automation Mission', sub: 'Power Automate', icon: 'zap', color: 'bg-red-700', url: '/Innovation_Cell/guides/Power_Automate_Mission_Guide.pdf' }
                 ];
 
                 return (
                     <div class="max-w-7xl mx-auto px-6 py-24">
-                        <div class="text-center mb-20">
-                            <h2 class="text-sm font-black text-[#FFC72C] uppercase tracking-[0.4em] mb-4">Resources</h2>
-                            <h3 class="text-5xl md:text-6xl font-black tracking-tight mb-6 italic">Flight Library</h3>
-                            <p class="text-slate-500 max-w-2xl mx-auto font-medium">Simple guides to help you master the tools we build.</p>
+                        <div class="text-center mb-24">
+                            <h2 class="text-sm font-black text-slate-400 uppercase tracking-[0.4em] mb-6">Strategic Resources</h2>
+                            <h3 class="text-5xl md:text-7xl font-black tracking-tight text-slate-900 mb-8 italic">Field Guides</h3>
+                            <p class="text-xl text-slate-600 max-w-xl mx-auto font-medium">Step-by-step guides for mission modernization.</p>
                         </div>
 
-                        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
                             {guides.map((guide, i) => (
-                                <a 
-                                    key={i} 
-                                    href={guide.url}
-                                    download
-                                    class="bg-white p-8 rounded-3xl border border-slate-100 card-shadow hover:scale-[1.02] transition-all cursor-pointer group flex flex-col h-full no-underline"
-                                >
-                                    <div class={`w-14 h-14 ${guide.color} rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg transform group-hover:-rotate-6 transition-transform`}>
-                                        <Icon name={guide.icon} size={28} />
+                                <a key={i} href={guide.url} download class="bg-white p-12 rounded-[2.5rem] border border-slate-200 card-shadow hover:translate-y-[-8px] transition-all flex flex-col h-full no-underline group">
+                                    <div class={`w-14 h-14 ${guide.color} rounded-2xl flex items-center justify-center text-white mb-10 shadow-lg`}>
+                                        <Icon name={guide.icon} size={26} />
                                     </div>
-                                    <p class="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">{guide.sub}</p>
-                                    <h4 class="text-xl font-black tracking-tight text-slate-900 mb-8">{guide.title}</h4>
-                                    <div class="mt-auto flex items-center justify-between text-[#003087] font-black uppercase text-[10px] tracking-widest pt-6 border-t border-slate-50">
-                                        <span>Download Resource</span>
-                                        <Icon name="download" size={16} />
+                                    <p class="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">{guide.sub}</p>
+                                    <h4 class="text-2xl font-extrabold tracking-tight text-slate-900 mb-12 leading-tight group-hover:text-[#003087] transition-colors">{guide.title}</h4>
+                                    <div class="mt-auto flex items-center justify-between text-[#003087] font-bold uppercase text-xs tracking-widest pt-8 border-t border-slate-100">
+                                        <span>Download PDF</span>
+                                        <Icon name="download" size={18} />
                                     </div>
                                 </a>
                             ))}
@@ -333,36 +321,33 @@
 
             const SubmitPage = () => (
                 <div class="max-w-4xl mx-auto px-6 py-24">
-                    <div class="bg-white rounded-[2.5rem] overflow-hidden card-shadow border border-slate-100">
-                        <div class="bg-[#003087] px-10 py-16 text-white text-center">
-                            <h2 class="text-4xl font-black tracking-tight mb-2 italic">Fix a mission process</h2>
-                            <p class="text-blue-300 font-bold uppercase text-[10px] tracking-[0.4em]">Tell us what's broken. We'll build the fix.</p>
+                    <div class="bg-white rounded-[3rem] overflow-hidden card-shadow border border-slate-200/60">
+                        <div class="bg-slate-50 border-b border-slate-200 px-12 py-20 text-center">
+                            <h2 class="text-5xl font-black tracking-tight mb-4 text-slate-900 italic">Fix a mission process</h2>
+                            <p class="text-slate-500 font-bold uppercase text-sm tracking-[0.3em]">Tell us what is broken. We will build the fix.</p>
                         </div>
-                        <form class="p-10 md:p-16 space-y-10" onSubmit={(e) => {
+                        <form class="p-12 md:p-20 space-y-14" onSubmit={(e) => {
                             e.preventDefault();
                             const formData = new FormData(e.target);
-                            const name = formData.get('name');
-                            const unit = formData.get('unit');
-                            const problem = formData.get('problem');
-                            const body = `Process Modernization Request\n\nOperator Name/Rank: ${name}\nUnit: ${unit}\n\nManual Bottleneck Description:\n${problem}`;
-                            window.location.href = `mailto:blake.carter.10@us.af.mil?subject=CA ANG Innovation Fellows&body=${encodeURIComponent(body)}`;
+                            const body = `Process Modernization Request\n\nName: ${formData.get('name')}\nUnit: ${formData.get('unit')}\nProblem: ${formData.get('problem')}`;
+                            window.location.href = `mailto:blake.carter.10@us.af.mil?subject=CA ANG Fix Request&body=${encodeURIComponent(body)}`;
                         }}>
-                            <div class="grid md:grid-cols-2 gap-10">
-                                <div class="space-y-3 text-left">
-                                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">What is your name?</label>
-                                    <input name="name" type="text" class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl p-5 focus:border-[#FFC72C] focus:bg-white outline-none font-bold transition-all" placeholder="e.g. MSgt Snuffy" required />
+                            <div class="grid md:grid-cols-2 gap-12">
+                                <div class="space-y-4 text-left">
+                                    <label class="text-sm font-black text-slate-500 uppercase tracking-widest block">What is your name?</label>
+                                    <input name="name" type="text" class="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 focus:border-[#003087] focus:bg-white outline-none font-bold transition-all text-lg placeholder-slate-300" placeholder="e.g. MSgt Snuffy" required />
                                 </div>
-                                <div class="space-y-3 text-left">
-                                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block">What is your unit?</label>
-                                    <input name="unit" type="text" class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl p-5 focus:border-[#FFC72C] focus:bg-white outline-none font-bold transition-all" placeholder="e.g. 144th FW" required />
+                                <div class="space-y-4 text-left">
+                                    <label class="text-sm font-black text-slate-500 uppercase tracking-widest block">What is your unit?</label>
+                                    <input name="unit" type="text" class="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 focus:border-[#003087] focus:bg-white outline-none font-bold transition-all text-lg placeholder-slate-300" placeholder="e.g. 144th FW" required />
                                 </div>
                             </div>
-                            <div class="space-y-3 text-left">
-                                <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block uppercase tracking-[0.2em]">Describe the manual bottleneck</label>
-                                <p class="text-xs text-slate-400 font-medium">What is the spreadsheet, email chain, or manual task that wastes the most time?</p>
-                                <textarea name="problem" rows="5" class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl p-5 focus:border-[#FFC72C] focus:bg-white outline-none font-medium transition-all resize-none" required></textarea>
+                            <div class="space-y-4 text-left">
+                                <label class="text-sm font-black text-slate-500 uppercase tracking-widest block tracking-widest">Describe the manual bottleneck</label>
+                                <p class="text-base text-slate-400 font-medium mb-4">Tell us about the spreadsheet, paper form, or email chain that wastes the most time.</p>
+                                <textarea name="problem" rows="6" class="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 focus:border-[#003087] focus:bg-white outline-none font-medium transition-all resize-none text-lg" required></textarea>
                             </div>
-                            <button type="submit" class="w-full py-6 bg-[#FFC72C] text-[#003087] rounded-2xl font-black uppercase text-sm tracking-[0.2em] shadow-xl hover:scale-[1.01] active:scale-95 transition-all">Submit mission request</button>
+                            <button type="submit" class="w-full py-8 bg-[#003087] text-white rounded-2xl font-black uppercase text-base tracking-[0.3em] shadow-xl hover:bg-[#002147] transition-all hover:scale-[1.01]">Submit mission request</button>
                         </form>
                     </div>
                 </div>
@@ -370,38 +355,36 @@
 
             const JoinPage = () => (
                 <div class="max-w-4xl mx-auto px-6 py-24 text-center">
-                    <h2 class="text-sm font-black text-[#003087] uppercase tracking-[0.4em] mb-4">The Fellowship</h2>
-                    <h3 class="text-5xl md:text-6xl font-black tracking-tight mb-8">Build the Future</h3>
-                    <p class="text-slate-500 font-medium max-w-xl mx-auto mb-16 leading-relaxed">
-                        We are looking for Airmen to join our next 90-day cycle. You bring a problem from your wing; we give you the tools and time to build a solution.
+                    <h2 class="text-sm font-black text-[#003087] uppercase tracking-[0.4em] mb-6">Innovation Fellowship</h2>
+                    <h3 class="text-5xl md:text-7xl font-black tracking-tight text-slate-900 mb-10">Build the Future</h3>
+                    <p class="text-xl text-slate-600 font-medium max-w-2xl mx-auto mb-20 leading-relaxed">
+                        We are recruiting Airmen to help transform how our Wing operates. Bring a problem; we give you the tools and time to fix it.
                     </p>
                     
-                    <div class="bg-slate-900 rounded-[3rem] p-10 md:p-20 text-white text-left relative overflow-hidden shadow-2xl">
-                        <div class="absolute top-0 right-0 w-1/2 h-full bg-blue-600/10 blur-[100px]"></div>
-                        <form class="relative z-10 space-y-12" onSubmit={(e) => {
+                    <div class="bg-white rounded-[3.5rem] p-16 md:p-24 border border-slate-200 card-shadow text-left relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-[#FFC72C]/5 rounded-full -mr-24 -mt-24"></div>
+                        <form class="relative z-10 space-y-20" onSubmit={(e) => {
                             e.preventDefault();
                             const formData = new FormData(e.target);
-                            const email = formData.get('email');
-                            const afsc = formData.get('afsc');
-                            const body = `CA ANG Innovation Fellows Membership Interest\n\nMilitary Email: ${email}\nAFSC: ${afsc}\n\nRequesting to participate in the next 60-90 day fellowship cycle to solve real-world Wing problems.`;
-                            window.location.href = `mailto:blake.carter.10@us.af.mil?subject=CA ANG Innovation Fellows&body=${encodeURIComponent(body)}`;
+                            const body = `Fellowship Interest\n\nEmail: ${formData.get('email')}\nAFSC: ${formData.get('afsc')}`;
+                            window.location.href = `mailto:blake.carter.10@us.af.mil?subject=CA ANG Fellowship Interest&body=${encodeURIComponent(body)}`;
                         }}>
-                            <div class="space-y-4">
-                                <label class="text-[10px] font-black text-blue-400 uppercase tracking-widest block">Military Email (.mil)</label>
-                                <input name="email" type="email" placeholder="jane.doe@us.af.mil" class="w-full bg-transparent border-b-2 border-slate-700 py-4 outline-none focus:border-[#FFC72C] transition-colors text-3xl font-black tracking-tight text-white placeholder-slate-700" required />
+                            <div class="space-y-6">
+                                <label class="text-sm font-black text-slate-500 uppercase tracking-widest block">Military Email (.mil)</label>
+                                <input name="email" type="email" placeholder="jane.doe@us.af.mil" class="w-full bg-transparent border-b-4 border-slate-100 py-6 outline-none focus:border-[#003087] transition-colors text-4xl font-black tracking-tight text-slate-900 placeholder-slate-100" required />
                             </div>
-                            <div class="grid md:grid-cols-2 gap-12">
-                                <div class="space-y-4">
-                                    <label class="text-[10px] font-black text-blue-400 uppercase tracking-widest block">What is your AFSC?</label>
-                                    <input name="afsc" type="text" placeholder="e.g. 17S, 3F5" class="w-full bg-transparent border-b-2 border-slate-700 py-4 outline-none focus:border-[#FFC72C] transition-colors text-3xl font-black text-white placeholder-slate-700" required />
+                            <div class="grid md:grid-cols-2 gap-20">
+                                <div class="space-y-6">
+                                    <label class="text-sm font-black text-slate-500 uppercase tracking-widest block">What is your AFSC?</label>
+                                    <input name="afsc" type="text" placeholder="e.g. 17S, 3F5" class="w-full bg-transparent border-b-4 border-slate-100 py-6 outline-none focus:border-[#003087] transition-colors text-4xl font-black text-slate-900 placeholder-slate-100" required />
                                 </div>
-                                <div class="flex flex-col justify-center space-y-3 border-l border-slate-800 pl-10">
-                                    <div class="flex items-center gap-3 text-[10px] font-black uppercase text-slate-400"><Icon name="check" size={14} className="text-[#FFC72C]" /> 4 Hours/Week Commitment</div>
-                                    <div class="flex items-center gap-3 text-[10px] font-black uppercase text-slate-400"><Icon name="check" size={14} className="text-[#FFC72C]" /> Remote & Flex-Time</div>
-                                    <div class="flex items-center gap-3 text-[10px] font-black uppercase text-slate-400"><Icon name="check" size={14} className="text-[#FFC72C]" /> Direct Impact on your Wing</div>
+                                <div class="flex flex-col justify-center space-y-6 border-l-4 border-slate-50 pl-14">
+                                    <div class="flex items-center gap-5 text-sm font-black uppercase text-slate-500"><div class="w-3 h-3 rounded-full bg-[#FFC72C]"></div> 4 Hours / Week</div>
+                                    <div class="flex items-center gap-5 text-sm font-black uppercase text-slate-500"><div class="w-3 h-3 rounded-full bg-[#FFC72C]"></div> Remote & Flex-Time</div>
+                                    <div class="flex items-center gap-5 text-sm font-black uppercase text-slate-500"><div class="w-3 h-3 rounded-full bg-[#FFC72C]"></div> Direct Wing Impact</div>
                                 </div>
                             </div>
-                            <button type="submit" class="w-full py-6 bg-white text-[#003087] rounded-2xl font-black uppercase text-sm tracking-[0.3em] shadow-2xl hover:bg-slate-50 transition-all">Tell us you're interested</button>
+                            <button type="submit" class="w-full py-8 bg-[#003087] text-white rounded-3xl font-black uppercase text-base tracking-[0.3em] shadow-xl hover:bg-[#002147] transition-all">Tell us you're interested</button>
                         </form>
                     </div>
                 </div>
@@ -417,18 +400,19 @@
                         {activeTab === 'submit' && <SubmitPage />}
                         {activeTab === 'join' && <JoinPage />}
                     </main>
-                    <footer class="bg-white border-t border-slate-200 py-20 px-6">
-                        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-                            <div class="flex items-center gap-4">
-                                <img src="CAANG%20flash.png" alt="CA ANG" class="w-12 h-12 grayscale opacity-40 object-contain" />
-                                <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    <footer class="bg-slate-50 border-t border-slate-200 py-24 px-6 mt-32">
+                        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-16 text-center md:text-left">
+                            <div class="flex items-center gap-8">
+                                <img src="CAANG%20flash.png" alt="CA ANG" class="w-12 h-12 grayscale opacity-30 object-contain" />
+                                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest leading-relaxed">
                                     HQ California Air National Guard • 2026<br/>
                                     Modernization Initiative
                                 </div>
                             </div>
-                            <div class="flex gap-8 text-[10px] font-black uppercase tracking-widest text-slate-300">
-                                <span>Built for Mission Execution</span>
-                                <span>Human-Centered Design</span>
+                            <div class="flex gap-16 text-xs font-black uppercase tracking-[0.3em] text-slate-300">
+                                <span>Mission Focused</span>
+                                <span>User Driven</span>
+                                <span>Human Centered</span>
                             </div>
                         </div>
                     </footer>
