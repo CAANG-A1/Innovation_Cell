@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CA ANG Innovation Cell</title>
     <!-- Tailwind CSS for Modern Styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/"></script>
     <!-- React and ReactDOM via CDN -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -249,37 +249,68 @@
                 </div>
             );
 
-            const LibraryPage = () => (
-                <div class="max-w-6xl mx-auto px-6 py-24">
-                    <div class="text-center mb-24">
-                        <div class="w-12 h-1 bg-[#FFC72C] mx-auto mb-8"></div>
-                        <h2 class="text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-4 italic">Flight Library</h2>
-                        <p class="text-slate-500 font-bold uppercase text-[10px] tracking-[0.4em]">Strategic Field Guides</p>
+            const LibraryPage = () => {
+                const guides = [
+                    { 
+                        title: 'Innovation Playbook', 
+                        sub: 'The Product Approach', 
+                        icon: 'book-open', 
+                        accent: 'bg-[#003087]',
+                        url: 'guides/Mission_Ready_Innovation_Field_Guide.pdf'
+                    },
+                    { 
+                        title: 'Power App Guide', 
+                        sub: 'Rapid Application Build', 
+                        icon: 'layout', 
+                        accent: 'bg-[#C8102E]',
+                        url: 'guides/Mission_Power_App_Deployment.pdf'
+                    },
+                    { 
+                        title: 'Power BI Briefing', 
+                        sub: 'Data Dominance', 
+                        icon: 'bar-chart-3', 
+                        accent: 'bg-[#FFC72C]',
+                        url: 'guides/Data_Dominance_Power_BI_Flight_Briefing.pdf'
+                    },
+                    { 
+                        title: 'Automation Mission', 
+                        sub: 'Power Automate', 
+                        icon: 'zap', 
+                        accent: 'bg-[#003087]',
+                        url: 'guides/Power_Automate_Mission_Guide.pdf'
+                    },
+                ];
+
+                return (
+                    <div class="max-w-6xl mx-auto px-6 py-24">
+                        <div class="text-center mb-24">
+                            <div class="w-12 h-1 bg-[#FFC72C] mx-auto mb-8"></div>
+                            <h2 class="text-5xl font-black text-slate-900 uppercase tracking-tighter leading-none mb-4 italic">Flight Library</h2>
+                            <p class="text-slate-500 font-bold uppercase text-[10px] tracking-[0.4em]">Strategic Field Guides</p>
+                        </div>
+                        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            {guides.map((guide, i) => (
+                                <a 
+                                    key={i} 
+                                    href={guide.url} 
+                                    target="_blank" 
+                                    class="bg-white border-2 border-slate-50 rounded-2xl p-8 hover:shadow-2xl transition-all flex flex-col group h-full cursor-pointer no-underline"
+                                >
+                                    <div class={`w-12 h-12 ${guide.accent} text-white flex items-center justify-center rounded-xl mb-6 shadow-lg`}>
+                                        <Icon name={guide.icon} size={22} />
+                                    </div>
+                                    <p class="text-[10px] font-black uppercase text-slate-400 mb-1">{guide.sub}</p>
+                                    <h4 class="text-xl font-black text-slate-900 uppercase tracking-tighter mb-4">{guide.title}</h4>
+                                    <div class="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between text-[#003087] font-black uppercase text-[10px]">
+                                        <span>Download Resource</span>
+                                        <Icon name="arrow-right" size={16} />
+                                    </div>
+                                </a>
+                            ))}
+                        </div>
                     </div>
-                    <div class="grid md:grid-cols-3 gap-8">
-                        {[
-                            { title: 'Innovation Playbook', sub: 'The Product Approach', icon: 'book-open', accent: 'bg-[#003087]' },
-                            { title: 'Power App Guide', sub: 'Rapid Application Build', icon: 'layout', accent: 'bg-[#C8102E]' },
-                            { title: 'Power BI Briefing', sub: 'Data Dominance', icon: 'bar-chart-3', accent: 'bg-[#FFC72C]' },
-                            { title: 'Automation Mission', sub: 'Power Automate', icon: 'zap', accent: 'bg-[#003087]' },
-                            { title: 'Tactical Recon', sub: 'Process Mapping', icon: 'search', accent: 'bg-slate-900' },
-                            { title: 'Success Metrics', sub: 'Outputs to Outcomes', icon: 'gauge', accent: 'bg-slate-400' },
-                        ].map((guide, i) => (
-                            <div key={i} class="bg-white border-2 border-slate-50 rounded-2xl p-8 hover:shadow-2xl transition-all flex flex-col group h-full cursor-pointer">
-                                <div class={`w-12 h-12 ${guide.accent} text-white flex items-center justify-center rounded-xl mb-6 shadow-lg`}>
-                                    <Icon name={guide.icon} size={22} />
-                                </div>
-                                <p class="text-[10px] font-black uppercase text-slate-400 mb-1">{guide.sub}</p>
-                                <h4 class="text-xl font-black text-slate-900 uppercase tracking-tighter mb-4">{guide.title}</h4>
-                                <div class="mt-auto pt-6 border-t border-slate-50 flex items-center justify-between text-[#003087] font-black uppercase text-[10px]">
-                                    <span>Download Resource</span>
-                                    <Icon name="arrow-right" size={16} />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            );
+                );
+            };
 
             const SubmitPage = () => (
                 <div class="max-w-4xl mx-auto px-6 py-24">
