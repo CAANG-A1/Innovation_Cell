@@ -12,26 +12,38 @@
     <!-- Babel for Browser JSX Transpilation -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .animate-in { animation: fadeIn 0.5s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            scroll-behavior: smooth;
+        }
+        .animate-in { animation: fadeIn 0.6s ease-out forwards; }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
     </style>
 </head>
 <body class="bg-white text-slate-900 antialiased">
     <div id="root"></div>
 
     <script type="text/babel">
-        // Destructure hooks from React
         const { useState, useEffect } = React;
 
-        // Custom Icon Component to handle Lucide in browser
+        // Custom Icon Component to handle Lucide in browser environment
         const Icon = ({ name, size = 20, className = "" }) => {
             useEffect(() => {
-                if (window.lucide) window.lucide.createIcons();
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
             }, [name]);
             return <i data-lucide={name} style={{ width: size, height: size }} className={`inline-block ${className}`}></i>;
         };
@@ -41,6 +53,7 @@
             const variants = {
                 primary: "bg-[#003087] text-white shadow-lg hover:bg-[#002147]",
                 secondary: "bg-white border-2 border-slate-200 text-slate-700 hover:border-[#003087]",
+                outline: "border-2 border-[#003087] text-[#003087] hover:bg-blue-50"
             };
 
             return (
@@ -51,20 +64,8 @@
             );
         };
 
-        const SectionHeader = ({ badge, title, subtitle }) => (
-            <div className="mb-16 text-center">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 border border-blue-100 rounded-full text-[#003087] text-[10px] font-black uppercase tracking-widest mb-4">
-                    {badge}
-                </div>
-                <h2 className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 mb-6 italic">{title}</h2>
-                {subtitle && <p className="text-lg text-slate-600 max-w-2xl mx-auto font-medium">{subtitle}</p>}
-            </div>
-        );
-
         const App = () => {
             const [activeTab, setActiveTab] = useState('home');
-            const [isMenuOpen, setIsMenuOpen] = useState(false);
-            const [surveyScore, setSurveyScore] = useState(null);
             const [formStatus, setFormStatus] = useState({ type: '', message: '' });
 
             const handleFormSubmit = (e, type) => {
@@ -72,35 +73,40 @@
                 const formData = new FormData(e.target);
                 const data = Object.fromEntries(formData.entries());
                 const recipient = "innovation@caang.mil";
-                const subject = type === 'submit' ? `Modernization Request: ${data.unit}` : `Fellowship Interest: ${data.name}`;
-                const body = `Type: ${type}\nName: ${data.name}\nUnit: ${data.unit}\nEmail: ${data.email}\nDetails: ${data.description}`;
+                
+                const subject = type === 'submit' 
+                    ? `Modernization Request: ${data.unit}` 
+                    : `Fellowship Interest: ${data.name}`;
+                
+                const body = `MISSION SUBMISSION\n------------------\nType: ${type.toUpperCase()}\nName: ${data.name}\nUnit: ${data.unit}\nEmail: ${data.email}\n\nDETAILS:\n${data.description}\n\n-- Sent via CA ANG Innovation Portal --`;
                 
                 window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                setFormStatus({ type: 'success', message: 'Email client opening...' });
-                setTimeout(() => setFormStatus({ type: '', message: '' }), 5000);
+                
+                setFormStatus({ type: 'success', message: 'Opening your email client... please click "Send" to complete the request.' });
+                setTimeout(() => setFormStatus({ type: '', message: '' }), 8000);
             };
 
             const navItems = [
-                { id: 'home', label: 'Home', icon: 'shield-check' },
-                { id: 'process', label: 'Workflow', icon: 'zap' },
-                { id: 'library', label: 'Guides', icon: 'book-open' },
-                { id: 'submit', label: 'Modernize', icon: 'plus-circle' },
-                { id: 'join', label: 'Fellowship', icon: 'users' }
+                { id: 'home', label: 'Home' },
+                { id: 'process', label: 'Workflow' },
+                { id: 'library', label: 'Guides' },
+                { id: 'submit', label: 'Modernize' },
+                { id: 'join', label: 'Fellowship' }
             ];
 
             const HomeView = () => (
-                <div className="space-y-32">
-                    <section className="relative pt-20 pb-32 text-center">
+                <div className="animate-in">
+                    <section className="relative pt-24 pb-32 text-center">
                         <div className="max-w-6xl mx-auto px-6">
-                            <div className="inline-flex items-center gap-3 px-4 py-2 bg-white border border-slate-200 rounded-full text-[#003087] text-xs font-black uppercase tracking-widest mb-10 shadow-sm">
+                            <div className="inline-flex items-center gap-3 px-4 py-2 bg-blue-50 border border-blue-100 rounded-full text-[#003087] text-[10px] font-black uppercase tracking-widest mb-10">
                                 <Icon name="cpu" size={14} /> Mission-Ready Digital Systems
                             </div>
-                            <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-[1.1] mb-10">
+                            <h1 className="text-6xl md:text-8xl font-black tracking-tight leading-[1.1] mb-10 text-slate-900">
                                 Stop fighting data.<br/>
                                 <span className="text-[#003087] italic underline decoration-[#FFC72C] decoration-8 underline-offset-8">Move the mission.</span>
                             </h1>
                             <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto mb-14 leading-relaxed font-medium">
-                                We replace manual, paper-based friction with digital tools built specifically for the CA ANG.
+                                We replace slow, manual workflows with simple digital apps that work for you, not against you.
                             </p>
                             <div className="flex flex-col sm:flex-row justify-center gap-4">
                                 <Button onClick={() => setActiveTab('submit')} icon="arrow-right">Submit a Bottleneck</Button>
@@ -108,6 +114,72 @@
                             </div>
                         </div>
                     </section>
+
+                    <section className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-8 pb-32">
+                        <div className="p-8 rounded-3xl border border-slate-100 bg-slate-50/50">
+                            <div className="w-12 h-12 bg-[#003087] rounded-xl flex items-center justify-center text-white mb-6 shadow-md"><Icon name="zap" size={24} /></div>
+                            <h3 className="text-xl font-bold mb-3">Rapid Sprint</h3>
+                            <p className="text-slate-600 text-sm leading-relaxed">We build functional prototypes on the Power Platform in 30 days or less.</p>
+                        </div>
+                        <div className="p-8 rounded-3xl border border-slate-100 bg-slate-50/50">
+                            <div className="w-12 h-12 bg-[#003087] rounded-xl flex items-center justify-center text-white mb-6 shadow-md"><Icon name="shield" size={24} /></div>
+                            <h3 className="text-xl font-bold mb-3">Secure by Design</h3>
+                            <p className="text-slate-600 text-sm leading-relaxed">Tools are built within the Air Force environment (NIPR) using your existing accounts.</p>
+                        </div>
+                        <div className="p-8 rounded-3xl border border-slate-100 bg-slate-50/50">
+                            <div className="w-12 h-12 bg-[#003087] rounded-xl flex items-center justify-center text-white mb-6 shadow-md"><Icon name="users" size={24} /></div>
+                            <h3 className="text-xl font-bold mb-3">Human Centered</h3>
+                            <p className="text-slate-600 text-sm leading-relaxed">We sit with Airmen on the flightline and in the shop to ensure tools actually solve their problems.</p>
+                        </div>
+                    </section>
+                </div>
+            );
+
+            const ProcessView = () => (
+                <div className="max-w-4xl mx-auto px-6 py-20 animate-in">
+                    <div className="text-center mb-16">
+                        <div className="text-[10px] font-black uppercase text-[#003087] tracking-[0.3em] mb-4">Execution Model</div>
+                        <h2 className="text-4xl font-black italic">The Innovation Workflow</h2>
+                    </div>
+                    <div className="space-y-12">
+                        {[
+                            { step: "01", title: "Observe", desc: "We sit with your team to map out the current manual process friction." },
+                            { step: "02", title: "Design", desc: "We architect a digital solution using PowerApps, SharePoint, or Excel Automation." },
+                            { step: "03", title: "Sprint", desc: "We build a functional 'Alpha' version of the tool in a 14-day sprint." },
+                            { step: "04", title: "Iterate", desc: "You test the tool in the field, and we refine it based on your direct feedback." }
+                        ].map((item, i) => (
+                            <div key={i} className="flex gap-8 items-start group">
+                                <div className="text-4xl font-black text-slate-200 group-hover:text-[#003087] transition-colors">{item.step}</div>
+                                <div>
+                                    <h4 className="text-xl font-bold mb-2">{item.title}</h4>
+                                    <p className="text-slate-600 leading-relaxed">{item.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+
+            const LibraryView = () => (
+                <div className="max-w-6xl mx-auto px-6 py-20 animate-in">
+                    <div className="text-center mb-16">
+                        <div className="text-[10px] font-black uppercase text-[#003087] tracking-[0.3em] mb-4">Strategic Resources</div>
+                        <h2 className="text-4xl font-black italic">Field Guides</h2>
+                    </div>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {[
+                            { title: "PowerApp Deployment", category: "Technical", desc: "How to deploy NIPR-ready apps." },
+                            { title: "Data Dominance", category: "Strategy", desc: "Visualizing wing readiness with PowerBI." },
+                            { title: "Innovation Playbook", category: "Mindset", desc: "The standard for modernizing squadron workflows." }
+                        ].map((guide, i) => (
+                            <div key={i} className="p-8 rounded-[2.5rem] border border-slate-200 bg-white hover:shadow-xl transition-all group">
+                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">{guide.category}</div>
+                                <h3 className="text-2xl font-bold mb-4 group-hover:text-[#003087] transition-colors italic">{guide.title}</h3>
+                                <p className="text-slate-500 text-sm mb-8">{guide.desc}</p>
+                                <Button variant="outline" className="w-full" icon="download">Request Copy</Button>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             );
 
@@ -115,18 +187,40 @@
                 <div className="max-w-4xl mx-auto px-6 py-20 animate-in">
                     <div className="bg-white rounded-[3rem] shadow-2xl border border-slate-200 overflow-hidden">
                         <div className="p-10 md:p-16 border-b border-slate-100 bg-slate-50">
-                            <h2 className="text-4xl font-black text-slate-900 mb-4 italic">{type === 'submit' ? "Fix a Problem" : "Join Fellowship"}</h2>
-                            <p className="text-slate-500 font-semibold uppercase text-xs tracking-[0.3em]">Direct email submission to the Innovation Cell.</p>
+                            <h2 className="text-4xl font-black text-slate-900 mb-4 italic">
+                                {type === 'submit' ? "Fix a Problem" : "Apply for Fellowship"}
+                            </h2>
+                            <p className="text-slate-500 font-semibold uppercase text-xs tracking-[0.3em]">
+                                This opens a pre-formatted email to our modernization team.
+                            </p>
                         </div>
                         <form className="p-10 md:p-16 space-y-8" onSubmit={(e) => handleFormSubmit(e, type)}>
                             <div className="grid md:grid-cols-2 gap-8">
-                                <input required name="name" className="w-full px-6 py-4 rounded-xl bg-slate-50 border-2 border-transparent focus:border-[#003087] focus:bg-white outline-none font-semibold" placeholder="Name / Rank" />
-                                <input required name="email" type="email" className="w-full px-6 py-4 rounded-xl bg-slate-50 border-2 border-transparent focus:border-[#003087] focus:bg-white outline-none font-semibold" placeholder=".mil Email" />
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-2">Name / Rank</label>
+                                    <input required name="name" className="w-full px-6 py-4 rounded-xl bg-slate-50 border-2 border-transparent focus:border-[#003087] focus:bg-white outline-none font-semibold transition-all" placeholder="MSgt Snuffy" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-2">.mil Email</label>
+                                    <input required name="email" type="email" className="w-full px-6 py-4 rounded-xl bg-slate-50 border-2 border-transparent focus:border-[#003087] focus:bg-white outline-none font-semibold transition-all" placeholder="joe.snuffy.1@us.af.mil" />
+                                </div>
                             </div>
-                            <input required name="unit" className="w-full px-6 py-4 rounded-xl bg-slate-50 border-2 border-transparent focus:border-[#003087] focus:bg-white outline-none font-semibold" placeholder="Unit / Wing" />
-                            <textarea required name="description" rows="4" className="w-full px-6 py-4 rounded-xl bg-slate-50 border-2 border-transparent focus:border-[#003087] focus:bg-white outline-none font-medium resize-none" placeholder="Describe the manual process or your interest..."></textarea>
-                            <Button type="submit" className="w-full">Open Email to Send</Button>
-                            {formStatus.message && <div className="text-center text-emerald-600 font-bold">{formStatus.message}</div>}
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-2">Unit / Squadron</label>
+                                <input required name="unit" className="w-full px-6 py-4 rounded-xl bg-slate-50 border-2 border-transparent focus:border-[#003087] focus:bg-white outline-none font-semibold transition-all" placeholder="144th MXG" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 px-2">
+                                    {type === 'submit' ? "Describe the Bottleneck" : "Why join the cell?"}
+                                </label>
+                                <textarea required name="description" rows="4" className="w-full px-6 py-4 rounded-xl bg-slate-50 border-2 border-transparent focus:border-[#003087] focus:bg-white outline-none font-medium transition-all resize-none" placeholder="Tell us about the manual process or your tech background..."></textarea>
+                            </div>
+                            <Button type="submit" className="w-full" icon="mail">Compose Submission Email</Button>
+                            {formStatus.message && (
+                                <div className="p-4 bg-emerald-50 text-emerald-700 rounded-xl text-center font-bold text-sm animate-in">
+                                    {formStatus.message}
+                                </div>
+                            )}
                         </form>
                     </div>
                 </div>
@@ -134,26 +228,53 @@
 
             return (
                 <div className="min-h-screen">
-                    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100 h-20 flex items-center">
+                    <nav className="sticky top-0 z-50 glass-nav border-b border-slate-100 h-20 flex items-center">
                         <div className="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
-                            <button onClick={() => setActiveTab('home')} className="flex items-center gap-4">
-                                <div className="w-10 h-10 bg-[#003087] rounded-xl flex items-center justify-center text-[#FFC72C]"><Icon name="shield-check" size={24} /></div>
-                                <div className="text-left"><div className="font-black text-lg leading-none">CA ANG</div><div className="text-[10px] uppercase font-black text-[#003087] tracking-widest">Innovation Cell</div></div>
+                            <button onClick={() => setActiveTab('home')} className="flex items-center gap-4 group">
+                                <div className="w-10 h-10 bg-[#003087] rounded-xl flex items-center justify-center text-[#FFC72C] group-hover:rotate-6 transition-transform">
+                                    <Icon name="shield-check" size={24} />
+                                </div>
+                                <div className="text-left">
+                                    <div className="font-black text-lg leading-none">CA ANG</div>
+                                    <div className="text-[10px] uppercase font-black text-[#003087] tracking-widest">Innovation Cell</div>
+                                </div>
                             </button>
                             <div className="hidden lg:flex gap-2">
                                 {navItems.map(item => (
-                                    <button key={item.id} onClick={() => setActiveTab(item.id)} className={`px-5 py-2 rounded-full text-[11px] font-black uppercase tracking-widest ${activeTab === item.id ? 'bg-blue-50 text-[#003087]' : 'text-slate-400'}`}>{item.label}</button>
+                                    <button 
+                                        key={item.id} 
+                                        onClick={() => setActiveTab(item.id)} 
+                                        className={`px-5 py-2 rounded-full text-[11px] font-black uppercase tracking-widest transition-all ${
+                                            activeTab === item.id ? 'bg-blue-50 text-[#003087]' : 'text-slate-400 hover:text-slate-900'
+                                        }`}
+                                    >
+                                        {item.label}
+                                    </button>
                                 ))}
                             </div>
                         </div>
                     </nav>
+
                     <main>
                         {activeTab === 'home' && <HomeView />}
+                        {activeTab === 'process' && <ProcessView />}
+                        {activeTab === 'library' && <LibraryView />}
                         {activeTab === 'submit' && <FormView type="submit" />}
                         {activeTab === 'join' && <FormView type="join" />}
-                        {activeTab === 'process' && <div className="py-20 text-center font-bold">Workflow details coming soon.</div>}
-                        {activeTab === 'library' && <div className="py-20 text-center font-bold">Field guides coming soon.</div>}
                     </main>
+
+                    <footer className="mt-32 border-t border-slate-100 bg-slate-50 py-16 px-6">
+                        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+                            <div className="flex items-center gap-4">
+                                <div className="font-black text-slate-400">CA ANG INNOVATION</div>
+                            </div>
+                            <div className="flex gap-8 text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">
+                                <span>Mission First</span>
+                                <span>User Driven</span>
+                                <span>Secure by Design</span>
+                            </div>
+                        </div>
+                    </footer>
                 </div>
             );
         };
