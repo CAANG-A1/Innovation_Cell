@@ -12,7 +12,7 @@
     <!-- Babel for Browser JSX Transpilation -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -65,13 +65,6 @@
         };
 
         const App = () => {
-            // Initialize state from URL hash or default to home
-            const [activeTab, setActiveTab] = useState(() => {
-                const hash = window.location.hash.replace('#', '');
-                return hash || 'home';
-            });
-            const [formStatus, setFormStatus] = useState({ type: '', message: '' });
-
             const navItems = [
                 { id: 'home', label: 'Home' },
                 { id: 'process', label: 'Workflow' },
@@ -80,32 +73,38 @@
                 { id: 'join', label: 'Fellowship' }
             ];
 
-            // Sync URL hash with state and handle browser navigation (back/forward)
-            useEffect(() => {
-                const handleHashChange = () => {
-                    const hash = window.location.hash.replace('#', '');
-                    if (navItems.some(item => item.id === hash)) {
-                        setActiveTab(hash);
-                    } else if (!hash) {
-                        setActiveTab('home');
-                    }
-                };
+            // Initialize state from URL hash or default to home
+            const [activeTab, setActiveTab] = useState(() => {
+                const hash = window.location.hash.replace('#', '');
+                return navItems.some(item => item.id === hash) ? hash : 'home';
+            });
+            const [formStatus, setFormStatus] = useState({ type: '', message: '' });
 
-                window.addEventListener('hashchange', handleHashChange);
-                return () => window.removeEventListener('hashchange', handleHashChange);
-            }, []);
-
-            // Update hash when tab changes
+            // 1. Sync state with URL hash whenever activeTab changes
             useEffect(() => {
                 const currentHash = window.location.hash.replace('#', '');
                 const targetHash = activeTab === 'home' ? '' : activeTab;
                 
                 if (currentHash !== targetHash) {
-                    window.location.hash = targetHash;
+                    // Using history.replaceState to prevent "stacking" the same hash in history
+                    const url = targetHash ? `#${targetHash}` : window.location.pathname;
+                    window.history.replaceState(null, '', url);
                 }
                 
                 window.scrollTo(0, 0);
             }, [activeTab]);
+
+            // 2. Listen for back/forward browser navigation
+            useEffect(() => {
+                const handleHashChange = () => {
+                    const hash = window.location.hash.replace('#', '');
+                    const matchedTab = navItems.find(item => item.id === hash);
+                    setActiveTab(matchedTab ? matchedTab.id : 'home');
+                };
+
+                window.addEventListener('hashchange', handleHashChange);
+                return () => window.removeEventListener('hashchange', handleHashChange);
+            }, []);
 
             const handleFormSubmit = (e, type) => {
                 e.preventDefault();
