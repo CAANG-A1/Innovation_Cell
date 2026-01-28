@@ -167,24 +167,29 @@
             );
 
             const ProcessView = () => (
-                <div className="max-w-4xl mx-auto px-6 py-20 animate-in">
+                <div className="max-w-6xl mx-auto px-6 py-20 animate-in">
                     <div className="text-center mb-16">
                         <div className="text-[10px] font-black uppercase text-[#003087] tracking-[0.3em] mb-4">Execution Model</div>
-                        <h2 className="text-4xl font-black italic">The Innovation Workflow</h2>
+                        <h2 className="text-4xl font-black italic">6 Steps to Success</h2>
+                        <p className="text-lg text-slate-600 max-w-2xl mx-auto font-medium mt-4">We build tools that Airmen actually enjoy using.</p>
                     </div>
-                    <div className="space-y-12">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
                         {[
-                            { step: "01", title: "Observe", desc: "We sit with your team to map out the current manual process friction." },
-                            { step: "02", title: "Design", desc: "We architect a digital solution using PowerApps, SharePoint, or Excel Automation." },
-                            { step: "03", title: "Sprint", desc: "We build a functional 'Alpha' version of the tool in a 14-day sprint." },
-                            { step: "04", title: "Iterate", desc: "You test the tool in the field, and we refine it based on your direct feedback." }
+                            { step: "01", title: "We Observe", icon: "eye", desc: "We sit with you to see the friction firsthand. We don't guess—we learn your workflow." },
+                            { step: "02", title: "We Map It", icon: "map", desc: "We visualize where data is stuck and draw a clear path to a better digital state." },
+                            { step: "03", title: "We Sprint", icon: "zap", desc: "Our team builds a functional, working version of your tool in 30 days or less." },
+                            { step: "04", title: "Use Your Tools", icon: "box", desc: "We build on the Power Platform and SharePoint you already own. No new accounts." },
+                            { step: "05", title: "Test Hard", icon: "shield-alert", desc: "You use it in the field. If it's slow or confusing, we change it immediately." },
+                            { step: "06", title: "Launch", icon: "rocket", desc: "The tool goes live wing-wide. We keep iterating based on your ongoing feedback." }
                         ].map((item, i) => (
-                            <div key={i} className="flex gap-8 items-start group">
-                                <div className="text-4xl font-black text-slate-200 group-hover:text-[#003087] transition-colors">{item.step}</div>
-                                <div>
-                                    <h4 className="text-xl font-bold mb-2">{item.title}</h4>
-                                    <p className="text-slate-600 leading-relaxed">{item.desc}</p>
+                            <div key={i} className="group relative">
+                                <div className="w-16 h-16 bg-slate-50 text-slate-400 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-[#003087] group-hover:text-white transition-all shadow-sm border border-slate-100">
+                                    <Icon name={item.icon} size={28} />
                                 </div>
+                                <h3 className="text-2xl font-extrabold tracking-tight mb-4 text-slate-900 flex items-center gap-4">
+                                    <span className="text-[#003087]/20 text-lg font-black">{item.step}</span> {item.title}
+                                </h3>
+                                <p className="text-lg text-slate-600 font-medium leading-relaxed">{item.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -196,18 +201,25 @@
                     <div className="text-center mb-16">
                         <div className="text-[10px] font-black uppercase text-[#003087] tracking-[0.3em] mb-4">Strategic Resources</div>
                         <h2 className="text-4xl font-black italic">Field Guides</h2>
+                        <p className="text-lg text-slate-600 max-w-xl mx-auto font-medium mt-4">Step-by-step guides for mission modernization.</p>
                     </div>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {[
-                            { title: "PowerApp Deployment", category: "Technical", desc: "How to deploy NIPR-ready apps." },
-                            { title: "Data Dominance", category: "Strategy", desc: "Visualizing wing readiness with PowerBI." },
-                            { title: "Innovation Playbook", category: "Mindset", desc: "The standard for modernizing squadron workflows." }
+                            { title: 'Innovation Playbook', category: 'Product Approach', icon: 'book-open', desc: 'The standard for modernizing squadron workflows.' },
+                            { title: 'Power App Guide', category: 'Rapid Deployment', icon: 'layout', desc: 'How to deploy NIPR-ready apps quickly.' },
+                            { title: 'Power BI Briefing', category: 'Data Dominance', icon: 'bar-chart-3', desc: 'Visualizing wing readiness with PowerBI.' },
+                            { title: 'Automation Mission', category: 'Power Automate', icon: 'zap', desc: 'Step-by-step automation of recurring tasks.' }
                         ].map((guide, i) => (
-                            <div key={i} className="p-8 rounded-[2.5rem] border border-slate-200 bg-white hover:shadow-xl transition-all group">
-                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">{guide.category}</div>
-                                <h3 className="text-2xl font-bold mb-4 group-hover:text-[#003087] transition-colors italic">{guide.title}</h3>
-                                <p className="text-slate-500 text-sm mb-8">{guide.desc}</p>
-                                <Button variant="outline" className="w-full" icon="download">Request Copy</Button>
+                            <div key={i} className="p-8 rounded-[2.5rem] border border-slate-200 bg-white hover:shadow-xl transition-all group flex flex-col h-full">
+                                <div className="w-12 h-12 bg-slate-50 text-[#003087] rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:bg-[#003087] group-hover:text-white transition-all">
+                                    <Icon name={guide.icon} size={24} />
+                                </div>
+                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{guide.category}</div>
+                                <h3 className="text-2xl font-bold mb-4 group-hover:text-[#003087] transition-colors italic leading-tight">{guide.title}</h3>
+                                <p className="text-slate-500 text-sm mb-8 flex-grow">{guide.desc}</p>
+                                <div className="pt-6 border-t border-slate-100">
+                                    <Button variant="outline" className="w-full text-[10px]" icon="download">Request Copy</Button>
+                                </div>
                             </div>
                         ))}
                     </div>
