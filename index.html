@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ShieldCheck, 
   Zap, 
@@ -21,7 +21,8 @@ import {
   Layout,
   Mail,
   Building2,
-  Cpu
+  Cpu,
+  ChevronRight
 } from 'lucide-react';
 
 // --- Utility Components ---
@@ -66,6 +67,11 @@ export default function App() {
   const [surveyScore, setSurveyScore] = useState(null);
   const [formStatus, setFormStatus] = useState({ type: '', message: '' });
 
+  // Scroll to top on tab change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeTab]);
+
   const handleFormSubmit = (e, type) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -73,33 +79,33 @@ export default function App() {
     
     const recipient = "innovation@caang.mil";
     const subject = type === 'submit' 
-      ? `Process Modernization Request - ${data.unit}` 
-      : `Fellowship Interest - ${data.name}`;
+      ? `Modernization Request: ${data.unit || 'Unit Unknown'}` 
+      : `Fellowship Interest: ${data.name || 'Applicant'}`;
     
     const body = `
 MODERNIZATION CELL SUBMISSION
 -----------------------------
 Type: ${type === 'submit' ? 'Workflow Request' : 'Fellowship Interest'}
-Name/Rank: ${data.name}
-Unit: ${data.unit}
-AFSC: ${data.afsc}
-Email: ${data.email}
+Name/Rank: ${data.name || 'N/A'}
+Unit: ${data.unit || 'N/A'}
+AFSC: ${data.afsc || 'N/A'}
+Email: ${data.email || 'N/A'}
 
 Details:
-${data.description}
+${data.description || 'No description provided.'}
 -----------------------------
 Sent via CA ANG Innovation Portal
     `.trim();
 
-    // Opening email client
+    // Standard mailto handling
     window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     
     setFormStatus({ 
       type: 'success', 
-      message: 'Redirecting to your email client. Please hit "Send" in the window that opens to complete your request.' 
+      message: 'Email client opening. Please click "Send" to complete your request.' 
     });
     
-    setTimeout(() => setFormStatus({ type: '', message: '' }), 5000);
+    setTimeout(() => setFormStatus({ type: '', message: '' }), 6000);
   };
 
   const navItems = [
@@ -113,10 +119,11 @@ Sent via CA ANG Innovation Portal
   // --- View Components ---
   const HomeView = () => (
     <div className="space-y-32">
+      {/* Hero Section */}
       <section className="relative pt-20 pb-32 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-gradient-to-b from-blue-50/50 to-transparent -z-10" />
         <div className="max-w-6xl mx-auto px-6 text-center">
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="animate-in fade-in slide-in-from-bottom-6 duration-700">
             <div className="inline-flex items-center gap-3 px-4 py-2 bg-white border border-slate-200 rounded-full text-[#003087] text-xs font-black uppercase tracking-widest mb-10 shadow-sm">
               <Cpu size={14} /> Mission-Ready Digital Systems
             </div>
@@ -139,14 +146,15 @@ Sent via CA ANG Innovation Portal
         </div>
       </section>
 
+      {/* Comparison Grid */}
       <section className="max-w-6xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-8">
-          <div className="bg-slate-50 p-10 rounded-[3rem] border border-slate-200/60 h-full">
+          <div className="bg-slate-50 p-10 rounded-[3rem] border border-slate-200/60 flex flex-col h-full">
             <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-slate-400 mb-8 shadow-sm">
               <Clock size={24} />
             </div>
             <h3 className="text-2xl font-black text-slate-800 mb-8 italic">The Analog Burden</h3>
-            <ul className="space-y-6">
+            <ul className="space-y-6 flex-grow">
               {[
                 "Hours spent manually updating Excel trackers",
                 "Mission status trapped in nested email threads",
@@ -159,13 +167,13 @@ Sent via CA ANG Innovation Portal
               ))}
             </ul>
           </div>
-          <div className="bg-[#003087] p-10 rounded-[3rem] h-full text-white shadow-2xl relative overflow-hidden group">
+          <div className="bg-[#003087] p-10 rounded-[3rem] text-white shadow-2xl relative overflow-hidden group flex flex-col h-full">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 transition-transform group-hover:scale-110" />
             <div className="w-12 h-12 bg-[#FFC72C] rounded-2xl flex items-center justify-center text-[#003087] mb-8 shadow-lg">
               <Zap size={24} />
             </div>
             <h3 className="text-2xl font-black mb-8 italic">The Modern Solution</h3>
-            <ul className="space-y-6">
+            <ul className="space-y-6 flex-grow">
               {[
                 "Automated PowerApps available on any device",
                 "Real-time dashboards with Mission Readiness KPIs",
@@ -181,8 +189,9 @@ Sent via CA ANG Innovation Portal
         </div>
       </section>
 
+      {/* Assessment Section */}
       <section className="max-w-4xl mx-auto px-6">
-        <div className="bg-white border-4 border-slate-100 p-16 rounded-[4rem] text-center shadow-sm">
+        <div className="bg-white border-4 border-slate-100 p-12 md:p-20 rounded-[4rem] text-center shadow-sm">
           <SectionHeader 
             badge="Unit Diagnosis" 
             title="Is your wing grounded by paper?" 
@@ -362,6 +371,7 @@ Sent via CA ANG Innovation Portal
 
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-[#FFC72C] selection:text-[#003087]">
+      {/* Navbar */}
       <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <button onClick={() => setActiveTab('home')} className="flex items-center gap-4 group">
@@ -395,8 +405,9 @@ Sent via CA ANG Innovation Portal
           </button>
         </div>
 
+        {/* Mobile Menu Overlay */}
         {isMenuOpen && (
-          <div className="lg:hidden absolute top-20 inset-x-0 bg-white border-b border-slate-200 p-6 animate-in slide-in-from-top-4">
+          <div className="lg:hidden absolute top-20 inset-x-0 bg-white border-b border-slate-200 p-6 shadow-xl animate-in slide-in-from-top-4">
             <div className="flex flex-col gap-2">
               {navItems.map(item => (
                 <button
@@ -414,7 +425,7 @@ Sent via CA ANG Innovation Portal
         )}
       </nav>
 
-      <main className="animate-in fade-in duration-500">
+      <main className="animate-in fade-in duration-700">
         {activeTab === 'home' && <HomeView />}
         {activeTab === 'process' && <ProcessView />}
         {activeTab === 'library' && <LibraryView />}
