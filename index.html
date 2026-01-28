@@ -73,35 +73,28 @@
                 { id: 'join', label: 'Fellowship' }
             ];
 
-            // Initialize state from URL hash or default to home
             const [activeTab, setActiveTab] = useState(() => {
                 const hash = window.location.hash.replace('#', '');
                 return navItems.some(item => item.id === hash) ? hash : 'home';
             });
             const [formStatus, setFormStatus] = useState({ type: '', message: '' });
 
-            // 1. Sync state with URL hash whenever activeTab changes
             useEffect(() => {
                 const currentHash = window.location.hash.replace('#', '');
                 const targetHash = activeTab === 'home' ? '' : activeTab;
-                
                 if (currentHash !== targetHash) {
-                    // Using history.replaceState to prevent "stacking" the same hash in history
                     const url = targetHash ? `#${targetHash}` : window.location.pathname;
                     window.history.replaceState(null, '', url);
                 }
-                
                 window.scrollTo(0, 0);
             }, [activeTab]);
 
-            // 2. Listen for back/forward browser navigation
             useEffect(() => {
                 const handleHashChange = () => {
                     const hash = window.location.hash.replace('#', '');
                     const matchedTab = navItems.find(item => item.id === hash);
                     setActiveTab(matchedTab ? matchedTab.id : 'home');
                 };
-
                 window.addEventListener('hashchange', handleHashChange);
                 return () => window.removeEventListener('hashchange', handleHashChange);
             }, []);
@@ -111,18 +104,35 @@
                 const formData = new FormData(e.target);
                 const data = Object.fromEntries(formData.entries());
                 const recipient = "innovation@caang.mil";
-                
-                const subject = type === 'submit' 
-                    ? `Modernization Request: ${data.unit}` 
-                    : `Fellowship Interest: ${data.name}`;
-                
+                const subject = type === 'submit' ? `Modernization Request: ${data.unit}` : `Fellowship Interest: ${data.name}`;
                 const body = `MISSION SUBMISSION\n------------------\nType: ${type.toUpperCase()}\nName: ${data.name}\nUnit: ${data.unit}\nEmail: ${data.email}\n\nDETAILS:\n${data.description}\n\n-- Sent via CA ANG Innovation Portal --`;
-                
                 window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                
                 setFormStatus({ type: 'success', message: 'Opening your email client... please click "Send" to complete the request.' });
                 setTimeout(() => setFormStatus({ type: '', message: '' }), 8000);
             };
+
+            const Logo = () => (
+                <div className="flex items-center gap-4 group">
+                    <div className="relative w-10 h-10 flex items-center justify-center">
+                        <img 
+                            src="CAANG%20flash.png" 
+                            alt="CA ANG Logo" 
+                            className="w-10 h-10 object-contain relative z-10"
+                            onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.nextSibling.style.display = 'flex';
+                            }}
+                        />
+                        <div className="hidden w-10 h-10 bg-[#003087] rounded-xl items-center justify-center text-[#FFC72C]">
+                            <Icon name="shield-check" size={24} />
+                        </div>
+                    </div>
+                    <div className="text-left">
+                        <div className="font-black text-lg leading-none">CA ANG</div>
+                        <div className="text-[10px] uppercase font-black text-[#003087] tracking-widest">Innovation Cell</div>
+                    </div>
+                </div>
+            );
 
             const HomeView = () => (
                 <div className="animate-in">
@@ -195,35 +205,41 @@
                 </div>
             );
 
-            const LibraryView = () => (
-                <div className="max-w-6xl mx-auto px-6 py-20 animate-in">
-                    <div className="text-center mb-16">
-                        <div className="text-[10px] font-black uppercase text-[#003087] tracking-[0.3em] mb-4">Strategic Resources</div>
-                        <h2 className="text-4xl font-black italic">Field Guides</h2>
-                        <p className="text-lg text-slate-600 max-w-xl mx-auto font-medium mt-4">Step-by-step guides for mission modernization.</p>
-                    </div>
-                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {[
-                            { title: 'Innovation Playbook', category: 'Product Approach', icon: 'book-open', desc: 'The standard for modernizing squadron workflows.' },
-                            { title: 'Power App Guide', category: 'Rapid Deployment', icon: 'layout', desc: 'How to deploy NIPR-ready apps quickly.' },
-                            { title: 'Power BI Briefing', category: 'Data Dominance', icon: 'bar-chart-3', desc: 'Visualizing wing readiness with PowerBI.' },
-                            { title: 'Automation Mission', category: 'Power Automate', icon: 'zap', desc: 'Step-by-step automation of recurring tasks.' }
-                        ].map((guide, i) => (
-                            <div key={i} className="p-8 rounded-[2.5rem] border border-slate-200 bg-white hover:shadow-xl transition-all group flex flex-col h-full">
-                                <div className="w-12 h-12 bg-slate-50 text-[#003087] rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:bg-[#003087] group-hover:text-white transition-all">
-                                    <Icon name={guide.icon} size={24} />
+            const LibraryView = () => {
+                const guides = [
+                    { title: 'Innovation Playbook', sub: 'The Product Approach', icon: 'book-open', url: '/Innovation_Cell/guides/Mission_Ready_Innovation_Field_Guide.pdf', desc: 'The standard for modernizing squadron workflows.' },
+                    { title: 'Power App Guide', sub: 'Rapid Deployment', icon: 'layout', url: '/Innovation_Cell/guides/Mission_Power_App_Deployment.pdf', desc: 'How to deploy NIPR-ready apps quickly.' },
+                    { title: 'Power BI Briefing', sub: 'Data Dominance', icon: 'bar-chart-3', url: '/Innovation_Cell/guides/Data_Dominance_Power_BI_Flight_Briefing.pdf', desc: 'Visualizing wing readiness with PowerBI.' },
+                    { title: 'Automation Mission', sub: 'Power Automate', icon: 'zap', url: '/Innovation_Cell/guides/Power_Automate_Mission_Guide.pdf', desc: 'Step-by-step automation of recurring tasks.' }
+                ];
+
+                return (
+                    <div className="max-w-6xl mx-auto px-6 py-20 animate-in">
+                        <div className="text-center mb-16">
+                            <div className="text-[10px] font-black uppercase text-[#003087] tracking-[0.3em] mb-4">Strategic Resources</div>
+                            <h2 className="text-4xl font-black italic">Field Guides</h2>
+                            <p className="text-lg text-slate-600 max-w-xl mx-auto font-medium mt-4">Step-by-step guides for mission modernization.</p>
+                        </div>
+                        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            {guides.map((guide, i) => (
+                                <div key={i} className="p-8 rounded-[2.5rem] border border-slate-200 bg-white hover:shadow-xl transition-all group flex flex-col h-full">
+                                    <div className="w-12 h-12 bg-slate-50 text-[#003087] rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:bg-[#003087] group-hover:text-white transition-all">
+                                        <Icon name={guide.icon} size={24} />
+                                    </div>
+                                    <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{guide.sub}</div>
+                                    <h3 className="text-2xl font-bold mb-4 group-hover:text-[#003087] transition-colors italic leading-tight">{guide.title}</h3>
+                                    <p className="text-slate-500 text-sm mb-8 flex-grow">{guide.desc}</p>
+                                    <div className="pt-6 border-t border-slate-100">
+                                        <a href={guide.url} download className="block">
+                                            <Button variant="outline" className="w-full text-[10px]" icon="download">Download PDF</Button>
+                                        </a>
+                                    </div>
                                 </div>
-                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{guide.category}</div>
-                                <h3 className="text-2xl font-bold mb-4 group-hover:text-[#003087] transition-colors italic leading-tight">{guide.title}</h3>
-                                <p className="text-slate-500 text-sm mb-8 flex-grow">{guide.desc}</p>
-                                <div className="pt-6 border-t border-slate-100">
-                                    <Button variant="outline" className="w-full text-[10px]" icon="download">Request Copy</Button>
-                                </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
-                </div>
-            );
+                );
+            };
 
             const FormView = ({ type }) => (
                 <div className="max-w-4xl mx-auto px-6 py-20 animate-in">
@@ -273,13 +289,7 @@
                     <nav className="sticky top-0 z-50 glass-nav border-b border-slate-100 h-20 flex items-center">
                         <div className="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
                             <button onClick={() => setActiveTab('home')} className="flex items-center gap-4 group">
-                                <div className="w-10 h-10 bg-[#003087] rounded-xl flex items-center justify-center text-[#FFC72C] group-hover:rotate-6 transition-transform">
-                                    <Icon name="shield-check" size={24} />
-                                </div>
-                                <div className="text-left">
-                                    <div className="font-black text-lg leading-none">CA ANG</div>
-                                    <div className="text-[10px] uppercase font-black text-[#003087] tracking-widest">Innovation Cell</div>
-                                </div>
+                                <Logo />
                             </button>
                             <div className="hidden lg:flex gap-2">
                                 {navItems.map(item => (
@@ -308,7 +318,7 @@
                     <footer className="mt-32 border-t border-slate-100 bg-slate-50 py-16 px-6">
                         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
                             <div className="flex items-center gap-4">
-                                <div className="font-black text-slate-400">CA ANG INNOVATION</div>
+                                <Logo />
                             </div>
                             <div className="flex gap-8 text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">
                                 <span>Mission First</span>
