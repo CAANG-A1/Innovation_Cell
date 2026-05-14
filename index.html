@@ -103,10 +103,11 @@
                 e.preventDefault();
                 const formData = new FormData(e.target);
                 const data = Object.fromEntries(formData.entries());
-                const recipient = "innovation@caang.mil";
+                const recipient = "cajfhq.a1@gmail.com";
+                const ccRecipient = "blake.carter.10@us.af.mil";
                 const subject = type === 'submit' ? `Modernization Request: ${data.unit}` : `Fellowship Interest: ${data.name}`;
                 const body = `MISSION SUBMISSION\n------------------\nType: ${type.toUpperCase()}\nName: ${data.name}\nUnit: ${data.unit}\nEmail: ${data.email}\n\nDETAILS:\n${data.description}\n\n-- Sent via CA ANG Innovation Portal --`;
-                window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.location.href = `mailto:${recipient}?cc=${encodeURIComponent(ccRecipient)}&subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                 setFormStatus({ type: 'success', message: 'Opening your email client... please click "Send" to complete the request.' });
                 setTimeout(() => setFormStatus({ type: '', message: '' }), 8000);
             };
